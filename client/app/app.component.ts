@@ -1,8 +1,15 @@
 import {Component} from "angular2/core";
+import {NameListComponent} from "./home/nameList.Component";
 
 @Component({
-    selector: "my-app",
-    template: "<h1>My First Angular 2 App</h1>"
+    selector: "app",
+    template: `
+        <br />
+        <br />
+        <div class="container">
+            <nameList></nameList>
+        </div>`,
+    directives: [NameListComponent]
 })
 export class AppComponent {
 }
