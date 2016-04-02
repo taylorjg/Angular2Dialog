@@ -1,6 +1,6 @@
-import {Component} from "angular2/core";
+import {Component, ViewChild} from "angular2/core";
 import {NameListItem} from "./nameListItem";
-import {FORM_DIRECTIVES} from "angular2/common";
+import {FORM_DIRECTIVES, NgForm} from "angular2/common";
 
 /*
  * This form should really be a modal dialog instead.
@@ -13,18 +13,29 @@ import {FORM_DIRECTIVES} from "angular2/common";
 @Component({
     selector: "nameListItemForm",
     template:
-    `<h2>{{_title}}</h2>
-    <form #f="ngForm" (ngSubmit)="onSubmit(f.value, f.valid)" novalidate>
-        <input type="text" ngControl="firstName" [(ngModel)]="_item.firstName" required minlength="5" />
-        <br />
-        <input type="text" ngControl="lastName" [(ngModel)]="_item.lastName" required />
-        <br />
-        <input type="email" ngControl="email" [(ngModel)]="_item.email" required />
-        <br />
-        <button type="submit">Submit</button>
-    </form>
-    <h3>formValue</h3>
-    <pre>{{ formValue | json }}</pre>`,
+    `<div class="row">
+        <div class="col-md-offset-1 col-md-5">
+            <h2>{{_title}}</h2>
+            <form #f="ngForm" (ngSubmit)="onSubmit(f.value, f.valid)" novalidate>
+                <div class="form-group">
+                    <label for="firstName">First name</label>
+                    <input type="text" class="form-control" ngControl="firstName" [(ngModel)]="_item.firstName" required />
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Last name</label>
+                    <input type="text" class="form-control" ngControl="lastName" [(ngModel)]="_item.lastName" required />
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" ngControl="email" [(ngModel)]="_item.email" required />
+                </div>
+                <br />
+                <button type="submit">Submit</button>
+            </form>
+            <h3>formValue</h3>
+            <pre>{{ formValue | json }}</pre>        
+        </div>
+    </div>`,
     directives: [FORM_DIRECTIVES],
 })
 export class NameListItemFormComponent {

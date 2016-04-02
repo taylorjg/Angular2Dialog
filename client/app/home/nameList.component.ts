@@ -6,7 +6,7 @@ import {NameListItemFormComponent} from "./nameListItemForm.component";
     selector: "nameList",
     template: 
     `<div class="row">
-        <div class="col-md-10 col-md-offset-1">
+        <div class="col-md-offset-1 col-md-10">
             <table class="table table-striped table-condensed table-bordered">
                 <thead>
                     <tr>
@@ -45,7 +45,8 @@ export class NameListComponent {
     ];
     onEditItem(item) {
         console.log("onEditItem", item.id);
-        this._form.editItem(item);
+        let copyOfItem = Object["assign"]({}, item);
+        this._form.editItem(copyOfItem);
     }
     onDeleteItem(item) {
         console.log("onDeleteItem", item.id);
