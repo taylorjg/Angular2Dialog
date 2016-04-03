@@ -18,7 +18,7 @@
         ],
         client: {
             ts: "client/app/**/*.ts",
-            html: "client/**/*.html"
+            html: "client/**/*.{html,css}"
         },
         dist: "server/dist",
         distApp: "server/dist/app",

@@ -18,19 +18,20 @@ import {FORM_DIRECTIVES, NgForm} from "angular2/common";
             <h2>{{_title}}</h2>
             <form #f="ngForm" (ngSubmit)="onSubmit(f.value, f.valid)" novalidate>
                 <div class="form-group">
-                    <label for="firstName">First name</label>
-                    <input type="text" class="form-control" ngControl="firstName" [(ngModel)]="_item.firstName" required />
+                    <label class="control-label" for="firstName">First name</label>
+                    <input type="text" id="firstName" class="form-control" ngControl="firstName" [(ngModel)]="_item.firstName" required />
                 </div>
                 <div class="form-group">
-                    <label for="lastName">Last name</label>
-                    <input type="text" class="form-control" ngControl="lastName" [(ngModel)]="_item.lastName" required />
+                    <label class="control-label" for="lastName">Last name</label>
+                    <input type="text" id="lastName" class="form-control" ngControl="lastName" [(ngModel)]="_item.lastName" required />
                 </div>
                 <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" class="form-control" ngControl="email" [(ngModel)]="_item.email" required />
+                    <label class="control-label" for="email">Email</label>
+                    <!-- http://stackoverflow.com/questions/34072092/generic-mail-validator-in-angular2 -->
+                    <input type="email" id="email" class="form-control" ngControl="email" [(ngModel)]="_item.email" required />
                 </div>
-                <br />
-                <button type="submit">Submit</button>
+                <button type="submit" class="btn btn-default">Save</button>
+                <button type="button" class="btn">Cancel</button>
             </form>
             <h3>formValue</h3>
             <pre>{{ formValue | json }}</pre>        
@@ -51,7 +52,7 @@ export class NameListItemFormComponent {
     }
     newItem() {
         this._title = `New Item`;
-        this._item = new NameListItem(-1, "", "", "");
+        this._item = new NameListItem();
     }
     onSubmit(formValue: Object, valid: boolean) {
         console.log(`onSubmit - valid: ${valid}`);
