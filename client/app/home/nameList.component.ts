@@ -43,15 +43,26 @@ export class NameListComponent {
         new NameListItem(42, "Jonathan", "Taylor", "jonathan.taylor@gmail.com"),
         new NameListItem(43, "Janis", "Joplin", "janis.joplin@gmail.com")
     ];
-    onEditItem(item) {
-        let copyOfItem = Object["assign"]({}, item);
-        this._form.editItem(copyOfItem);
+    onEditItem(oldItem: NameListItem) {
+        let clone = oldItem.clone();
+        let subscription = this._form.editItem(clone).subscribe(
+            newItem => {
+                let index = this._nameListItems.indexOf(oldItem);
+                this._nameListItems.splice(index, 1, newItem);
+            },
+            null,
+            () => subscription.unsubscribe());
     }
-    onDeleteItem(item) {
-        let index = this._nameListItems.indexOf(item); 
+    onDeleteItem(oldItem: NameListItem) {
+        let index = this._nameListItems.indexOf(oldItem); 
         this._nameListItems.splice(index, 1);
     }
     onAddItem() {
-        this._form.newItem();
+        let subscription = this._form.newItem().subscribe(
+            newItem => {
+                this._nameListItems.push(newItem);
+            },
+            null,
+            () => subscription.unsubscribe());
     }
 }

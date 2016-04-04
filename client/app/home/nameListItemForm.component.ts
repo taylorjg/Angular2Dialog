@@ -1,5 +1,7 @@
 import {Component, ApplicationRef} from "angular2/core";
 import {FORM_DIRECTIVES, FormBuilder, ControlGroup, AbstractControl, Validators} from "angular2/common";
+import {Observable} from "rxjs/Observable";
+import {Subject} from "rxjs/Subject";
 import {NameListItem} from "./nameListItem";
 
 /*
@@ -39,14 +41,6 @@ import {NameListItem} from "./nameListItem";
                 <button type="submit" class="btn btn-sm btn-default">Save</button>
                 <button type="button" class="btn btn-sm" (click)="_onCancel()">Cancel</button>
             </form>
-            <!--
-            <h3>_myForm.value</h3>
-            <pre>{{ _myForm.value | json }}</pre>        
-            <h3>_myForm.errors</h3>
-            <pre>{{ _myForm.errors | json }}</pre>        
-            <h3>_myForm.valid</h3>
-            <pre>{{ _myForm.valid | json }}</pre>
-            -->        
         </div>
     </div>`,
     directives: [FORM_DIRECTIVES]
@@ -58,7 +52,8 @@ export class NameListItemFormComponent {
     private _email: AbstractControl;
     private _active: boolean = false;
     private _title: string;
-    private _item: NameListItem = new NameListItem();
+    private _item: NameListItem;
+    private _currentItem$: Subject<NameListItem>;
     constructor(fb: FormBuilder, private _applicationRef: ApplicationRef) {
         this._myForm = fb.group({
             "firstName": ["", Validators.compose([Validators.required])],
@@ -69,27 +64,31 @@ export class NameListItemFormComponent {
         this._lastName = this._myForm.controls["lastName"];
         this._email = this._myForm.controls["email"];
     }
-    editItem(item: NameListItem) {
+    editItem(item: NameListItem): Observable<NameListItem> {
         this._title = `Edit Item ${item.id}`;
         this._item = item;
         this._active = true;
-        // Without this, [ngClass]="_setFeedbackClasses(...)" doesn't seem to work properly.
-        this._applicationRef.tick();
+        this._forceTick();
+        return this._createCurrentItem$();
     }
-    newItem() {
+    newItem(): Observable<NameListItem> {
         this._title = `New Item`;
         this._item = new NameListItem();        
         this._active = true;
-        // Without this, [ngClass]="_setFeedbackClasses(...)" doesn't seem to work properly.
-        this._applicationRef.tick();
+        this._forceTick();
+        return this._createCurrentItem$();
     }
     private _onSubmit() {
-        console.log(`onSubmit - this._myForm.valid: ${this._myForm.valid}`);
         if (this._myForm.valid) {
+            this._currentItem$.next(this._item);
+            this._currentItem$.complete();
+            this._currentItem$ = null;
             this._active = false;
         }
     }
     private _onCancel() {
+        this._currentItem$.complete();
+        this._currentItem$ = null;
         this._active = false;
     }
     private _setFeedbackClasses(c: AbstractControl) {
@@ -97,5 +96,21 @@ export class NameListItemFormComponent {
             "has-success": c.valid,
             "has-error": !c.valid
         };
+    }
+    private _forceTick() {
+        // Without this, [ngClass]="_setFeedbackClasses(...)" doesn't seem
+        // to take effect until another round of change detection has
+        // occurred e.g. if I tab out of the firstName field to the
+        // lastName field, I then see the correct CSS classes.
+        // With this workaround in place, I don't have to tab out to see the
+        // correct CSS classes. 
+        this._applicationRef.tick();
+    }
+    private _createCurrentItem$(): Subject<NameListItem> {
+        if (this._currentItem$) {
+            this._currentItem$.complete();
+        }
+        this._currentItem$ = new Subject<NameListItem>();
+        return this._currentItem$;
     }
 }
