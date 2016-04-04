@@ -51,9 +51,9 @@ export class NameListItemFormComponent {
     private _lastName: AbstractControl;
     private _email: AbstractControl;
     private _active: boolean = false;
-    private _title: string;
-    private _item: NameListItem;
-    private _currentItem$: Subject<NameListItem>;
+    private _title: string = "";
+    private _item: NameListItem = null;
+    private _currentItem$: Subject<NameListItem>= null;
     constructor(fb: FormBuilder, private _applicationRef: ApplicationRef) {
         this._myForm = fb.group({
             "firstName": ["", Validators.compose([Validators.required])],
