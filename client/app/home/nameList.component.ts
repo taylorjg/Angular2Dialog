@@ -18,7 +18,7 @@ import {NameListItemFormComponent} from "./nameListItemForm.component";
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="#item of nameListItems">
+                    <tr *ngFor="#item of _nameListItems">
                         <td>{{item.id}}</td>
                         <td>{{item.firstName}}</td>
                         <td>{{item.lastName}}</td>
@@ -39,20 +39,19 @@ import {NameListItemFormComponent} from "./nameListItemForm.component";
 })
 export class NameListComponent {
     @ViewChild("form") private _form: NameListItemFormComponent;
-    nameListItems = [
+    private _nameListItems = [
         new NameListItem(42, "Jonathan", "Taylor", "jonathan.taylor@gmail.com"),
         new NameListItem(43, "Janis", "Joplin", "janis.joplin@gmail.com")
     ];
     onEditItem(item) {
-        console.log("onEditItem", item.id);
         let copyOfItem = Object["assign"]({}, item);
         this._form.editItem(copyOfItem);
     }
     onDeleteItem(item) {
-        console.log("onDeleteItem", item.id);
+        let index = this._nameListItems.indexOf(item); 
+        this._nameListItems.splice(index, 1);
     }
     onAddItem() {
-        console.log("onAddItem");
         this._form.newItem();
     }
 }
