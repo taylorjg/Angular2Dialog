@@ -1,6 +1,7 @@
 import {Component, ViewChild} from "angular2/core";
 import {NameListItem} from "./nameListItem";
 import {NameListItemFormComponent} from "./nameListItemForm.component";
+import {NameListService} from "./nameList.service";
 
 @Component({
     selector: "nameList",
@@ -24,14 +25,14 @@ import {NameListItemFormComponent} from "./nameListItemForm.component";
                         <td>{{item.lastName}}</td>
                         <td>{{item.email}}</td>
                         <td>
-                            <button class="btn btn-primary btn-sm editBtn" (click)="onEditItem(item)">Edit</button>
-                            <button class="btn btn-danger btn-sm deleteBtn" (click)="onDeleteItem(item)">Delete</button>
+                            <button class="btn btn-primary btn-sm editBtn" (click)="_onEditItem(item)">Edit</button>
+                            <button class="btn btn-danger btn-sm deleteBtn" (click)="_onDeleteItem(item)">Delete</button>
                         </td>
                     </tr>
                 </tbody>
             </table>
             <hr/>
-            <button id="addItemBtn" class="btn btn-primary btn-sm" (click)="onAddItem()">Add Item</button>
+            <button id="addItemBtn" class="btn btn-primary btn-sm" (click)="_onAddItem()">Add Item</button>
         </div>
     </div>
     <nameListItemForm #form></nameListItemForm>`,
@@ -39,11 +40,11 @@ import {NameListItemFormComponent} from "./nameListItemForm.component";
 })
 export class NameListComponent {
     @ViewChild("form") private _form: NameListItemFormComponent;
-    private _nameListItems = [
-        new NameListItem(42, "Jonathan", "Taylor", "jonathan.taylor@gmail.com"),
-        new NameListItem(43, "Janis", "Joplin", "janis.joplin@gmail.com")
-    ];
-    onEditItem(oldItem: NameListItem) {
+    private _nameListItems: NameListItem[];
+    constructor(private _nameListService: NameListService) {
+        _nameListService.get().subscribe(arr => this._nameListItems = arr);
+    }
+    private _onEditItem(oldItem: NameListItem) {
         let clone = oldItem.clone();
         let subscription = this._form.editItem(clone).subscribe(
             newItem => {
@@ -53,11 +54,11 @@ export class NameListComponent {
             null,
             () => subscription.unsubscribe());
     }
-    onDeleteItem(oldItem: NameListItem) {
+    private _onDeleteItem(oldItem: NameListItem) {
         let index = this._nameListItems.indexOf(oldItem); 
         this._nameListItems.splice(index, 1);
     }
-    onAddItem() {
+    private _onAddItem() {
         let subscription = this._form.newItem().subscribe(
             newItem => {
                 this._nameListItems.push(newItem);

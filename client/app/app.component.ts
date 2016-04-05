@@ -1,5 +1,6 @@
 import {Component} from "angular2/core";
 import {NameListComponent} from "./home/nameList.Component";
+import {NameListService} from "./home/nameList.service";
 
 @Component({
     selector: "app",
@@ -9,7 +10,8 @@ import {NameListComponent} from "./home/nameList.Component";
         <div class="container">
             <nameList></nameList>
         </div>`,
-    directives: [NameListComponent]
+    directives: [NameListComponent],
+    providers: [NameListService]
 })
 export class AppComponent {
 }
