@@ -45,7 +45,7 @@ export class NameListComponent {
         _nameListService.get().subscribe(arr => this._nameListItems = arr);
     }
     private _onEditItem(oldItem: NameListItem) {
-        let clone = oldItem.clone();
+        let clone = this._cloneItem(oldItem);
         let subscription = this._form.editItem(clone).subscribe(
             newItem => {
                 let index = this._nameListItems.indexOf(oldItem);
@@ -65,5 +65,8 @@ export class NameListComponent {
             },
             null,
             () => subscription.unsubscribe());
+    }
+    private _cloneItem(item: NameListItem) {
+        return new NameListItem(item.id, item.firstName, item.lastName, item.email);
     }
 }
