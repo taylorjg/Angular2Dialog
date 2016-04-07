@@ -50,6 +50,7 @@ export class NameListComponent {
             newItem => {
                 let index = this._nameListItems.indexOf(oldItem);
                 this._nameListItems.splice(index, 1, newItem);
+                this._nameListService.update(newItem).subscribe(console.log.bind(console));
             },
             null,
             () => subscription.unsubscribe());
@@ -57,11 +58,13 @@ export class NameListComponent {
     private _onDeleteItem(oldItem: NameListItem) {
         let index = this._nameListItems.indexOf(oldItem); 
         this._nameListItems.splice(index, 1);
+        this._nameListService.delete(oldItem).subscribe(console.log.bind(console));
     }
     private _onAddItem() {
         let subscription = this._form.newItem().subscribe(
             newItem => {
                 this._nameListItems.push(newItem);
+                this._nameListService.create(newItem).subscribe(console.log.bind(console));
             },
             null,
             () => subscription.unsubscribe());

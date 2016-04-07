@@ -1,5 +1,6 @@
 var express = require("express");
 var app = express();
+var bodyParser = require("body-parser");
 var port = process.env.PORT || 3000;
 
 var nameList = [
@@ -17,6 +18,9 @@ apiRouter.get('/:id', handleApiReadOne);
 apiRouter.post('/', handleApiCreate);
 apiRouter.put('/:id', handleApiUpdate);
 apiRouter.delete('/:id', handleApiDelete);
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use("/", express.static("server/dist"));
 app.use('/api', apiRouter);
@@ -40,38 +44,23 @@ function handleApiReadOne(req, res, _) {
 }
 
 function handleApiCreate(req, res, _) {
-    
-    // TODO: get these values from the request body...
-    var firstName = "";
-    var lastName = "";
-    var email = "";
-    
     var item = {
         id: nextId++,
-        firstName: firstName,
-        lastName: lastName,
-        email: email
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        email: req.body.email
     };
-    
     nameList.push(item);
-    
     sendJsonResponse(res, 201, item);   
 }
 
 function handleApiUpdate(req, res, _) {
-    var id = req.params.id;
+    var id = Number(req.params.id);
     var item = nameListFind(id);
     if (item) {
-        
-        // TODO: get these values from the request body...
-        var firstName = "";
-        var lastName = "";
-        var email = "";
-        
-        item.firstName = firstName;
-        item.lastName = lastName;
-        item.email = email;
-        
+        item.firstName = req.body.firstName;
+        item.lastName = req.body.lastName;
+        item.email = req.body.email;
         sendJsonResponse(res, 200, item);
         return;   
     }
@@ -79,7 +68,7 @@ function handleApiUpdate(req, res, _) {
 }
 
 function handleApiDelete(req, res, _) {
-    var id = req.params.id;
+    var id = Number(req.params.id);
     var index = nameListFindIndex(id);
     if (index >= 0) {
         nameList.splice(index, 1);
@@ -93,6 +82,9 @@ function sendJsonResponse(res, status, content) {
     res.status(status);
     if (content) {
         res.json(content);
+    }
+    else {
+        res.end();
     }
 }
 
