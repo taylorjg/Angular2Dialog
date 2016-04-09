@@ -3,6 +3,7 @@ import {FORM_DIRECTIVES, FormBuilder, ControlGroup, AbstractControl, Validators}
 import {Observable} from "rxjs/Observable";
 import {Subject} from "rxjs/Subject";
 import {NameListItem} from "./nameListItem";
+import {CustomValidators} from "./customValidators";
 
 /*
  * This form should really be a modal dialog instead.
@@ -58,7 +59,7 @@ export class NameListItemFormComponent {
         this._myForm = fb.group({
             "firstName": ["", Validators.compose([Validators.required])],
             "lastName": ["", Validators.compose([Validators.required])],
-            "email": ["", Validators.compose([Validators.required])]
+            "email": ["", Validators.compose([Validators.required, CustomValidators.email])]
         });
         this._firstName = this._myForm.controls["firstName"];
         this._lastName = this._myForm.controls["lastName"];
