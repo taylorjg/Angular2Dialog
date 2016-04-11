@@ -1,4 +1,5 @@
 import {Component, ViewChild} from "angular2/core";
+import {Observer} from "rxjs/Observer";
 import {NameListItem} from "./nameListItem";
 import {NameListItemFormComponent} from "./nameListItemForm.component";
 import {NameListService} from "./nameList.service";
@@ -8,6 +9,13 @@ import {NameListService} from "./nameList.service";
     template: 
     `<div class="row">
         <div class="col-md-offset-1 col-md-10">
+            <div *ngIf="_serviceCallInProgress" class="progress">
+                <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
+                </div>
+            </div>
+            <div *ngIf="_serviceCallErrorMessage" class="alert alert-danger" role="alert">
+                {{ _serviceCallErrorMessage }}
+            </div>
             <table class="table table-striped table-condensed table-bordered">
                 <thead>
                     <tr>
@@ -31,7 +39,7 @@ import {NameListService} from "./nameList.service";
                     </tr>
                 </tbody>
             </table>
-            <hr/>
+            <hr />
             <button id="addItemBtn" class="btn btn-primary btn-sm" (click)="_onAddItem()">Add Item</button>
         </div>
     </div>
@@ -41,20 +49,34 @@ import {NameListService} from "./nameList.service";
 export class NameListComponent {
     @ViewChild("form") private _form: NameListItemFormComponent;
     private _nameListItems: NameListItem[];
+    private _serviceCallInProgress = false;
+    private _serviceCallErrorMessage = "";
     constructor(private _nameListService: NameListService) {
         this._getItems();
     }
     private _getItems() {
-        this._nameListService.get().subscribe(arr => this._nameListItems = arr);
+        // this._nameListService.get().subscribe(arr => this._nameListItems = arr);
+        let observer = this._makeObserver<NameListItem[]>(arr => this._nameListItems = arr);
+        this._nameListService.get().subscribe(observer);
     }
     private _onEditItem(oldItem: NameListItem) {
         let clone = this._cloneItem(oldItem);
+        // let subscription = this._form.editItem(clone).subscribe(
+        //     newItem => {
+        //         this._nameListService.update(newItem).subscribe(response => {
+        //             console.log(response);
+        //             this._getItems();
+        //         });
+        //     },
+        //     null,
+        //     () => subscription.unsubscribe());
         let subscription = this._form.editItem(clone).subscribe(
             newItem => {
-                this._nameListService.update(newItem).subscribe(response => {
+                let observer = this._makeObserver<any>(response => {
                     console.log(response);
                     this._getItems();
                 });
+                this._nameListService.update(newItem).subscribe(observer);
             },
             null,
             () => subscription.unsubscribe());
@@ -78,5 +100,18 @@ export class NameListComponent {
     }
     private _cloneItem(item: NameListItem) {
         return new NameListItem(item.id, item.firstName, item.lastName, item.email);
+    }
+    private _makeObserver<T>(next: (value: T) => void): Observer<T> {
+        this._serviceCallInProgress = true;
+        return {
+            next: next,
+            error: response => {
+                this._serviceCallInProgress = false;
+                this._serviceCallErrorMessage = response.status;
+            },
+            complete: () => {
+                this._serviceCallInProgress = false;
+            }
+        };
     }
 }
