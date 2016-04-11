@@ -42,29 +42,36 @@ export class NameListComponent {
     @ViewChild("form") private _form: NameListItemFormComponent;
     private _nameListItems: NameListItem[];
     constructor(private _nameListService: NameListService) {
-        _nameListService.get().subscribe(arr => this._nameListItems = arr);
+        this._getItems();
+    }
+    private _getItems() {
+        this._nameListService.get().subscribe(arr => this._nameListItems = arr);
     }
     private _onEditItem(oldItem: NameListItem) {
         let clone = this._cloneItem(oldItem);
         let subscription = this._form.editItem(clone).subscribe(
             newItem => {
-                let index = this._nameListItems.indexOf(oldItem);
-                this._nameListItems.splice(index, 1, newItem);
-                this._nameListService.update(newItem).subscribe(console.log.bind(console));
+                this._nameListService.update(newItem).subscribe(response => {
+                    console.log(response);
+                    this._getItems();
+                });
             },
             null,
             () => subscription.unsubscribe());
     }
     private _onDeleteItem(oldItem: NameListItem) {
-        let index = this._nameListItems.indexOf(oldItem); 
-        this._nameListItems.splice(index, 1);
-        this._nameListService.delete(oldItem).subscribe(console.log.bind(console));
+        this._nameListService.delete(oldItem).subscribe(response => {
+            console.log(response);
+            this._getItems();
+        });
     }
     private _onAddItem() {
         let subscription = this._form.newItem().subscribe(
             newItem => {
-                this._nameListItems.push(newItem);
-                this._nameListService.create(newItem).subscribe(console.log.bind(console));
+                this._nameListService.create(newItem).subscribe(response => {
+                    console.log(response);
+                    this._getItems();
+                });
             },
             null,
             () => subscription.unsubscribe());
