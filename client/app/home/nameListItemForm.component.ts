@@ -17,31 +17,31 @@ import {CustomValidators} from "./customValidators";
     selector: "nameListItemForm",
     template:
     `<div *ngIf="_active" class="row">
-        <div class="col-md-offset-1 col-md-6">
+        <div class="col-md-offset-1 col-md-4">
             <h2>{{_title}}</h2>
             <form [ngFormModel]="_myForm" (ngSubmit)="_onSubmit()" novalidate>
                 <div class="form-group" [ngClass]="_setFeedbackClasses(_firstName)">
                     <label class="control-label" for="firstName">First name</label>
                     <input type="text" id="firstName" class="form-control" [ngFormControl]="_firstName" [(ngModel)]="_item.firstName">
-                    <span *ngIf="_firstName.valid && _firstName.dirty" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
-                    <span *ngIf="!_firstName.valid && _firstName.dirty" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
-                    <div *ngIf="_firstName.hasError('required') && _firstName.dirty" class="help-block">Please enter your first name</div> 
+                    <span *ngIf="_firstName.valid && _firstName.touched" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+                    <span *ngIf="!_firstName.valid && _firstName.touched" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                    <div *ngIf="_firstName.hasError('required') && _firstName.touched" class="help-block">Please enter your first name</div> 
                 </div>
                 <div class="form-group" [ngClass]="_setFeedbackClasses(_lastName)">
                     <label class="control-label" for="lastName">Last name</label>
                     <input type="text" id="lastName" class="form-control" [ngFormControl]="_lastName" [(ngModel)]="_item.lastName">
-                    <span *ngIf="_lastName.valid && _lastName.dirty" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
-                    <span *ngIf="!_lastName.valid && _lastName.dirty" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
-                    <div *ngIf="_lastName.hasError('required') && _lastName.dirty" class="help-block">Please enter your last name</div> 
+                    <span *ngIf="_lastName.valid && _lastName.touched" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+                    <span *ngIf="!_lastName.valid && _lastName.touched" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                    <div *ngIf="_lastName.hasError('required') && _lastName.touched" class="help-block">Please enter your last name</div> 
                 </div>
                 <div class="form-group" [ngClass]="_setFeedbackClasses(_email)">
                     <label class="control-label" for="email">Email</label>
                     <!-- http://stackoverflow.com/questions/34072092/generic-mail-validator-in-angular2 -->
                     <input type="email" id="email" class="form-control" [ngFormControl]="_email" [(ngModel)]="_item.email">
-                    <span *ngIf="_email.valid && _email.dirty" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
-                    <span *ngIf="!_email.valid && _email.dirty" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
-                    <div *ngIf="_email.hasError('required') && _email.dirty" class="help-block">Please enter your email address</div> 
-                    <div *ngIf="_email.hasError('email') && _email.dirty" class="help-block">Please enter a valid email address</div> 
+                    <span *ngIf="_email.valid && _email.touched" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+                    <span *ngIf="!_email.valid && _email.touched" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                    <div *ngIf="_email.hasError('required') && _email.touched" class="help-block">Please enter your email address</div> 
+                    <div *ngIf="_email.hasError('email') && _email.touched" class="help-block">Please enter a valid email address</div> 
                 </div>
                 <button type="submit" class="btn btn-sm btn-default">Save</button>
                 <button type="button" class="btn btn-sm" (click)="_onCancel()">Cancel</button>
@@ -60,10 +60,9 @@ export class NameListItemFormComponent {
     private _item: NameListItem = null;
     private _currentItem$: Subject<NameListItem>= null;
     constructor(private _fb: FormBuilder, private _applicationRef: ApplicationRef) {
-        this._rebuildForm();
     }
     editItem(item: NameListItem): Observable<NameListItem> {
-        this._rebuildForm();
+        this._rebuildForm(true);
         this._title = `Edit Item ${item.id}`;
         this._item = item;
         this._active = true;
@@ -71,7 +70,7 @@ export class NameListItemFormComponent {
         return this._createCurrentItem$();
     }
     newItem(): Observable<NameListItem> {
-        this._rebuildForm();
+        this._rebuildForm(false);
         this._title = `New Item`;
         this._item = new NameListItem();
         this._active = true;
@@ -93,9 +92,9 @@ export class NameListItemFormComponent {
     }
     private _setFeedbackClasses(c: AbstractControl) {
         return {
-            "has-feedback": c.dirty,
-            "has-success": c.dirty && c.valid,
-            "has-error": c.dirty && !c.valid
+            "has-feedback": c.touched,
+            "has-success": c.touched && c.valid,
+            "has-error": c.touched && !c.valid
         };
     }
     private _forceTick() {
@@ -114,7 +113,7 @@ export class NameListItemFormComponent {
         this._currentItem$ = new Subject<NameListItem>();
         return this._currentItem$;
     }
-    private _rebuildForm(): void{
+    private _rebuildForm(editMode: boolean): void{
         this._myForm = this._fb.group({
             "firstName": ["", Validators.compose([Validators.required])],
             "lastName": ["", Validators.compose([Validators.required])],
@@ -123,5 +122,10 @@ export class NameListItemFormComponent {
         this._firstName = this._myForm.controls["firstName"];
         this._lastName = this._myForm.controls["lastName"];
         this._email = this._myForm.controls["email"];
+        if (editMode) {
+            this._firstName.markAsTouched();
+            this._lastName.markAsTouched();
+            this._email.markAsTouched();
+        }
     }
 }
