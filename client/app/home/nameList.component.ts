@@ -55,21 +55,11 @@ export class NameListComponent {
         this._getItems();
     }
     private _getItems() {
-        // this._nameListService.get().subscribe(arr => this._nameListItems = arr);
         let observer = this._makeObserver<NameListItem[]>(arr => this._nameListItems = arr);
         this._nameListService.get().subscribe(observer);
     }
     private _onEditItem(oldItem: NameListItem) {
         let clone = this._cloneItem(oldItem);
-        // let subscription = this._form.editItem(clone).subscribe(
-        //     newItem => {
-        //         this._nameListService.update(newItem).subscribe(response => {
-        //             console.log(response);
-        //             this._getItems();
-        //         });
-        //     },
-        //     null,
-        //     () => subscription.unsubscribe());
         let subscription = this._form.editItem(clone).subscribe(
             newItem => {
                 let observer = this._makeObserver<any>(response => {
@@ -82,18 +72,20 @@ export class NameListComponent {
             () => subscription.unsubscribe());
     }
     private _onDeleteItem(oldItem: NameListItem) {
-        this._nameListService.delete(oldItem).subscribe(response => {
+        let observer = this._makeObserver<any>(response => {
             console.log(response);
             this._getItems();
         });
+        this._nameListService.delete(oldItem).subscribe(observer);
     }
     private _onAddItem() {
         let subscription = this._form.newItem().subscribe(
             newItem => {
-                this._nameListService.create(newItem).subscribe(response => {
+                let observer = this._makeObserver<any>(response => {
                     console.log(response);
                     this._getItems();
                 });
+                this._nameListService.create(newItem).subscribe(observer);
             },
             null,
             () => subscription.unsubscribe());
@@ -107,7 +99,7 @@ export class NameListComponent {
             next: next,
             error: response => {
                 this._serviceCallInProgress = false;
-                this._serviceCallErrorMessage = response.status;
+                this._serviceCallErrorMessage = `${response.status} ${response._body}`;
             },
             complete: () => {
                 this._serviceCallInProgress = false;

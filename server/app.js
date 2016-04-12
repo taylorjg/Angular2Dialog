@@ -79,11 +79,12 @@ function handleApiDelete(req, res, _) {
 }
 
 function sendJsonResponse(res, status, content) {
-    res.status(status);
     if (content) {
+        res.status(status);
         res.json(content);
     }
     else {
+        res.sendStatus(status);
         res.end();
     }
 }
