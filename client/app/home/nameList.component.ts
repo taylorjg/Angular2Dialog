@@ -55,14 +55,14 @@ export class NameListComponent {
         this._getItems();
     }
     private _getItems() {
-        let observer = this._makeObserver<NameListItem[]>(arr => this._nameListItems = arr);
+        let observer = this._makeObserver<NameListItem[]>("get", arr => this._nameListItems = arr);
         this._nameListService.get().subscribe(observer);
     }
     private _onEditItem(oldItem: NameListItem) {
         let clone = this._cloneItem(oldItem);
         let subscription = this._form.editItem(clone).subscribe(
             newItem => {
-                let observer = this._makeObserver<any>(response => {
+                let observer = this._makeObserver<any>("update", response => {
                     console.log(response);
                     this._getItems();
                 });
@@ -72,7 +72,7 @@ export class NameListComponent {
             () => subscription.unsubscribe());
     }
     private _onDeleteItem(oldItem: NameListItem) {
-        let observer = this._makeObserver<any>(response => {
+        let observer = this._makeObserver<any>("delete", response => {
             console.log(response);
             this._getItems();
         });
@@ -81,7 +81,7 @@ export class NameListComponent {
     private _onAddItem() {
         let subscription = this._form.newItem().subscribe(
             newItem => {
-                let observer = this._makeObserver<any>(response => {
+                let observer = this._makeObserver<any>("create", response => {
                     console.log(response);
                     this._getItems();
                 });
@@ -93,16 +93,18 @@ export class NameListComponent {
     private _cloneItem(item: NameListItem) {
         return new NameListItem(item.id, item.firstName, item.lastName, item.email);
     }
-    private _makeObserver<T>(next: (value: T) => void): Observer<T> {
+    private _makeObserver<T>(serviceMethod: string, next: (value: T) => void): Observer<T> {
         this._serviceCallInProgress = true;
+        this._serviceCallErrorMessage = "";
         return {
             next: next,
             error: response => {
                 this._serviceCallInProgress = false;
-                this._serviceCallErrorMessage = `${response.status} ${response._body}`;
+                this._serviceCallErrorMessage = `Call to ${serviceMethod} failed (${response.status} ${response.text()}).`;
             },
             complete: () => {
                 this._serviceCallInProgress = false;
+                this._serviceCallErrorMessage = "";
             }
         };
     }

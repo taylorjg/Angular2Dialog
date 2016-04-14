@@ -31,12 +31,12 @@ export class NameListService {
         headers.append("Content-Type", "application/json");
         let options = { headers: headers };
         return this._http
-            .put("/api/" + item.id, JSON.stringify(item), options)
+            .put(`/api/${item.id}`, JSON.stringify(item), options)
             .delay(SIMULATED_NETWORK_DELAY);
     }
     delete(item: NameListItem): Observable<Response> {
         return this._http
-            .delete("/api/" + item.id)
+            .delete(`/api/${item.id}`)
             .delay(SIMULATED_NETWORK_DELAY);
     }
 }
