@@ -6,7 +6,7 @@ import "rxjs/add/operator/map";
 import "rxjs/add/operator/delay";
 import {NameListItem} from "./NameListItem";
 
-const SIMULATED_NETWORK_DELAY = 1500;
+const SIMULATED_NETWORK_DELAY = 500;
 
 @Injectable()
 export class NameListService {

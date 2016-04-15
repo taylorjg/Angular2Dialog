@@ -49,6 +49,7 @@ import {NameListService} from "./nameList.service";
 export class NameListComponent {
     @ViewChild("form") private _form: NameListItemFormComponent;
     private _nameListItems: NameListItem[];
+    private _serviceCallsInProgressCount = 0;
     private _serviceCallInProgress = false;
     private _serviceCallErrorMessage = "";
     constructor(private _nameListService: NameListService) {
@@ -94,18 +95,28 @@ export class NameListComponent {
         return new NameListItem(item.id, item.firstName, item.lastName, item.email);
     }
     private _makeObserver<T>(serviceMethod: string, next: (value: T) => void): Observer<T> {
-        this._serviceCallInProgress = true;
+        this._incrementServiceCallsInProgressCount();
         this._serviceCallErrorMessage = "";
         return {
             next: next,
             error: response => {
-                this._serviceCallInProgress = false;
+                this._decrementServiceCallsInProgressCount();
                 this._serviceCallErrorMessage = `Call to ${serviceMethod} failed (${response.status} ${response.text()}).`;
             },
             complete: () => {
-                this._serviceCallInProgress = false;
+                this._decrementServiceCallsInProgressCount();
                 this._serviceCallErrorMessage = "";
             }
         };
+    }
+    private _incrementServiceCallsInProgressCount() {
+        this._changeServiceCallsInProgressCount(+1);
+    }
+    private _decrementServiceCallsInProgressCount() {
+        this._changeServiceCallsInProgressCount(-1);
+    }
+    private _changeServiceCallsInProgressCount(delta: number) {
+        this._serviceCallsInProgressCount += delta;
+        this._serviceCallInProgress = (this._serviceCallsInProgressCount > 0);
     }
 }
