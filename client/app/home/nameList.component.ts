@@ -1,4 +1,4 @@
-import {Component, ViewChild} from "angular2/core";
+import {Component, ViewChild} from "@angular/core";
 import {Observer} from "rxjs/Observer";
 import {NameListItem} from "./nameListItem";
 import {NameListItemFormComponent} from "./nameListItemForm.component";

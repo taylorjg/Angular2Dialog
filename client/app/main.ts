@@ -1,9 +1,9 @@
-/// <reference path="../../node_modules/angular2/typings/browser.d.ts" />
+/// <reference path="../../typings/index.d.ts" />
 
-import {bootstrap} from "angular2/platform/browser";
+import {bootstrap} from "@angular/platform-browser-dynamic";
+import {enableProdMode} from "@angular/core";
+import {HTTP_PROVIDERS} from "@angular/http";
 import {AppComponent} from "./app.component";
-import {enableProdMode} from "angular2/core";
-import {HTTP_PROVIDERS} from "angular2/http";
 
 // ngClass not setting from Component Method
 // https://github.com/angular/angular/issues/7426

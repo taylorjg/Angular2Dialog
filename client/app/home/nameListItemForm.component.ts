@@ -1,5 +1,5 @@
-import {Component, ApplicationRef} from "angular2/core";
-import {FORM_DIRECTIVES, FormBuilder, ControlGroup, AbstractControl, Validators} from "angular2/common";
+import {Component, ApplicationRef} from "@angular/core";
+import {FORM_DIRECTIVES, FormBuilder, ControlGroup, AbstractControl, Validators} from "@angular/common";
 import {Observable} from "rxjs/Observable";
 import {Subject} from "rxjs/Subject";
 import {NameListItem} from "./nameListItem";
