@@ -1,5 +1,5 @@
 {
-  "name": "Angular2Dialog",
+  "name": "angular2dialog",
   "version": "0.0.0",
   "description": "",
   "main": "gulpfile.js",
@@ -20,9 +20,15 @@
   },
   "devDependencies": {
     "copy-webpack-plugin": "^3.0.1",
+    "css-loader": "^0.23.1",
     "del": "^2.2.0",
+    "extract-text-webpack-plugin": "^1.0.1",
     "gulp": "^3.9.1",
     "gulp-typescript": "^2.12.1",
+    "html-loader": "^0.4.3",
+    "html-webpack-plugin": "^2.21.0",
+    "raw-loader": "^0.5.1",
+    "style-loader": "^0.13.1",
     "ts-loader": "^0.8.2",
     "typescript": "^1.8.10",
     "typings": "^1.1.0",
@@ -32,6 +38,10 @@
     "start": "node server/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/taylorjg/Angular2Dialog.git"
+  },
+  "author": "Jonathan Taylor",
+  "license": "MIT"
 }
