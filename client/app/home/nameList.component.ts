@@ -2,6 +2,7 @@ import {Component, ViewChild} from "@angular/core";
 import {Observer} from "rxjs/Observer";
 import {NameListItem} from "./nameListItem";
 import {NameListItemFormComponent} from "./nameListItemForm.component";
+import {TestModalComponent} from "./testModal.component";
 import {NameListService} from "./nameList.service";
 
 @Component({
@@ -43,8 +44,9 @@ import {NameListService} from "./nameList.service";
             <button id="addItemBtn" class="btn btn-primary btn-sm" (click)="_onAddItem()">Add Item</button>
         </div>
     </div>
+    <test-modal></test-modal>
     <nameListItemForm #form></nameListItemForm>`,
-    directives: [NameListItemFormComponent]
+    directives: [NameListItemFormComponent, TestModalComponent]
 })
 export class NameListComponent {
     @ViewChild("form") private _form: NameListItemFormComponent;

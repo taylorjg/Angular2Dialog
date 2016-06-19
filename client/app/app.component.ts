@@ -1,4 +1,4 @@
-import {Component} from "@angular/core";
+import {Component, ViewContainerRef} from "@angular/core";
 import {NameListComponent} from "./home/nameList.Component";
 import {NameListService} from "./home/nameList.service";
 
@@ -14,4 +14,8 @@ import {NameListService} from "./home/nameList.service";
     providers: [NameListService]
 })
 export class AppComponent {
+    public viewContainerRef: ViewContainerRef;
+    public constructor(viewContainerRef: ViewContainerRef) {
+        this.viewContainerRef = viewContainerRef;
+    }
 }
