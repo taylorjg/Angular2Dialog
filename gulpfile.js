@@ -5,7 +5,7 @@ const del = require('del');
 const webpack = require('webpack');
 
 gulp.task('clean', function (done) {
-    del(['./server/dist'], done);
+    del(['./server/public'], done);
 });
 
 gulp.task('webpack', function (done) {

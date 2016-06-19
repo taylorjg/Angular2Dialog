@@ -10,7 +10,7 @@ module.exports = {
         'vendor': './client/app/vendor.ts'
     },
     output: {
-        path: './server/dist',
+        path: './server/public',
         filename: 'bundle.js'
     },
     plugins: [

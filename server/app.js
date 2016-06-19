@@ -22,7 +22,7 @@ apiRouter.delete('/:id', handleApiDelete);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use("/", express.static("server/dist"));
+app.use("/", express.static("server/public"));
 app.use('/api', apiRouter);
 
 app.listen(port, function () {
