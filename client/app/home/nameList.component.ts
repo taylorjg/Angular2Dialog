@@ -27,7 +27,7 @@ import {NameListService} from "./nameList.service";
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="#item of _nameListItems">
+                    <tr *ngFor="let item of _nameListItems">
                         <td>{{item.id}}</td>
                         <td>{{item.firstName}}</td>
                         <td>{{item.lastName}}</td>
