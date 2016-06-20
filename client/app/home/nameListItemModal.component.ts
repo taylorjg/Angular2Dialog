@@ -1,4 +1,4 @@
-import {Component, ViewChild} from "@angular/core";
+import {Component, ViewChild, ApplicationRef} from "@angular/core";
 import {CORE_DIRECTIVES, FORM_DIRECTIVES, FormBuilder, ControlGroup, AbstractControl, Validators} from "@angular/common";
 import {ModalDirective, MODAL_DIRECTVES, BS_VIEW_PROVIDERS} from "ng2-bootstrap/ng2-bootstrap";
 import {Observable} from "rxjs/Observable";
@@ -38,7 +38,6 @@ import {CustomValidators} from "./customValidators";
                             </div>
                             <div class="form-group" [ngClass]="_setFeedbackClasses(_email)">
                                 <label class="control-label" for="email">Email</label>
-                                <!-- http://stackoverflow.com/questions/34072092/generic-mail-validator-in-angular2 -->
                                 <input type="email" id="email" class="form-control" [ngFormControl]="_email" [(ngModel)]="_item.email">
                                 <span *ngIf="_email.valid && _email.touched" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
                                 <span *ngIf="!_email.valid && _email.touched" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
@@ -48,7 +47,7 @@ import {CustomValidators} from "./customValidators";
                     </div>
 
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-sm btn-default">Save</button>
+                        <button type="submit" class="btn btn-sm btn-primary">Save</button>
                         <button type="button" class="btn btn-sm" (click)="_onCancel()">Cancel</button>
                     </div>
                 
@@ -68,11 +67,13 @@ export class NameListItemModalComponent {
     private _title: string = "";
     private _item: NameListItem = null;
     private _currentItem$: Subject<NameListItem>= null;
-    constructor(private _fb: FormBuilder) {
+    constructor(private _fb: FormBuilder, private _applicationRef: ApplicationRef) {
         this._item = new NameListItem();
         this._rebuildForm(false);
     }
     public editItem(item: NameListItem): Observable<NameListItem> {
+        this._item = new NameListItem();
+        this._forceTick();
         this._item = item;
         this._rebuildForm(true);
         this._title = `Edit Item ${item.id}`;
@@ -127,5 +128,8 @@ export class NameListItemModalComponent {
             this._lastName.markAsTouched();
             this._email.markAsTouched();
         }
+    }
+    private _forceTick() {
+        this._applicationRef.tick();
     }
 }
