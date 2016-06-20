@@ -1,9 +1,8 @@
 import {Component, ViewChild} from "@angular/core";
 import {Observer} from "rxjs/Observer";
 import {NameListItem} from "./nameListItem";
-import {NameListItemFormComponent} from "./nameListItemForm.component";
-import {TestModalComponent} from "./testModal.component";
 import {NameListService} from "./nameList.service";
+import {NameListItemModalComponent} from "./nameListItemModal.component";
 
 @Component({
     selector: "nameList",
@@ -44,12 +43,11 @@ import {NameListService} from "./nameList.service";
             <button id="addItemBtn" class="btn btn-primary btn-sm" (click)="_onAddItem()">Add Item</button>
         </div>
     </div>
-    <test-modal></test-modal>
-    <nameListItemForm #form></nameListItemForm>`,
-    directives: [NameListItemFormComponent, TestModalComponent]
+    <nameListItemModal #mymodal></nameListItemModal>`,
+    directives: [NameListItemModalComponent]
 })
 export class NameListComponent {
-    @ViewChild("form") private _form: NameListItemFormComponent;
+    @ViewChild("mymodal") private _mymodal: NameListItemModalComponent;
     private _nameListItems: NameListItem[];
     private _serviceCallsInProgressCount = 0;
     private _serviceCallInProgress = false;
@@ -63,7 +61,7 @@ export class NameListComponent {
     }
     private _onEditItem(oldItem: NameListItem) {
         let clone = this._cloneItem(oldItem);
-        let subscription = this._form.editItem(clone).subscribe(
+        let subscription = this._mymodal.editItem(clone).subscribe(
             newItem => {
                 let observer = this._makeObserver<any>("update", response => {
                     console.log(response);
@@ -82,7 +80,7 @@ export class NameListComponent {
         this._nameListService.delete(oldItem).subscribe(observer);
     }
     private _onAddItem() {
-        let subscription = this._form.newItem().subscribe(
+        let subscription = this._mymodal.newItem().subscribe(
             newItem => {
                 let observer = this._makeObserver<any>("create", response => {
                     console.log(response);
