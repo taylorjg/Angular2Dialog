@@ -10,7 +10,7 @@ import {CustomValidators} from "./customValidators";
     selector: 'nameListItemModal',
     template: `
     <div bsModal #modal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog">
             <div class="modal-content">
                 <form [ngFormModel]="_myForm" (ngSubmit)="_onSubmit()" novalidate>
 

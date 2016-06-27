@@ -9,3 +9,16 @@ A few things will be different:
 * I will be using a nodejs/Express backend instead of IIS/ASP.NET MVC
 * I plan on using MongoDB for persistence
 * etc.
+
+## Screenshots
+
+![MainWindow](Screenshots/MainWindow.png)
+
+![EditItemDialog](Screenshots/EditItemDialog.png)
+
+![NewItemDialog](Screenshots/NewItemDialog.png)
+
+## Links
+
+* [angular](https://angular.io/)
+* [ng2-bootstrap](https://github.com/valor-software/ng2-bootstrap)
