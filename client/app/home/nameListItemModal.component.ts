@@ -1,10 +1,10 @@
-import {Component, ViewChild, ApplicationRef} from "@angular/core";
-import {CORE_DIRECTIVES, FORM_DIRECTIVES, FormBuilder, ControlGroup, AbstractControl, Validators} from "@angular/common";
-import {ModalDirective, MODAL_DIRECTVES, BS_VIEW_PROVIDERS} from "ng2-bootstrap/ng2-bootstrap";
-import {Observable} from "rxjs/Observable";
-import {Subject} from "rxjs/Subject";
-import {NameListItem} from "./nameListItem";
-import {CustomValidators} from "./customValidators";
+import {Component, ViewChild, ApplicationRef} from '@angular/core';
+import {FormBuilder, FormControl, FormGroup, AbstractControl, Validators} from '@angular/forms';
+import {ModalDirective} from 'ng2-bootstrap/ng2-bootstrap';
+import {Observable} from 'rxjs/Observable';
+import {Subject} from 'rxjs/Subject';
+import {NameListItem} from './nameListItem';
+import {CustomValidators} from './customValidators';
 
 @Component({
     selector: 'nameListItemModal',
@@ -54,13 +54,13 @@ import {CustomValidators} from "./customValidators";
                 </form>
             </div>
         </div>
-    </div>`,
-    directives: [FORM_DIRECTIVES, MODAL_DIRECTVES, CORE_DIRECTIVES],
-    viewProviders: [BS_VIEW_PROVIDERS]
+    </div>`//,
+    // directives: [FORM_DIRECTIVES, MODAL_DIRECTVES, CORE_DIRECTIVES],
+    // viewProviders: [BS_VIEW_PROVIDERS]
 })
 export class NameListItemModalComponent {
-    @ViewChild("modal") private _modal: ModalDirective;
-    private _myForm: ControlGroup;
+    @ViewChild('modal') private _modal: ModalDirective;
+    private _myForm: FormGroup;
     private _firstName: AbstractControl;
     private _lastName: AbstractControl;
     private _email: AbstractControl;
@@ -83,7 +83,7 @@ export class NameListItemModalComponent {
     public newItem(): Observable<NameListItem> {
         this._item = new NameListItem();
         this._rebuildForm(false);
-        this._title = `New Item`;
+        this._title = 'New Item';
         this._modal.show();
         return this._createCurrentItem$();
     }
@@ -102,9 +102,9 @@ export class NameListItemModalComponent {
     }
     private _setFeedbackClasses(c: AbstractControl) {
         return {
-            "has-feedback": c.touched,
-            "has-success": c.touched && c.valid,
-            "has-error": c.touched && !c.valid
+            'has-feedback': c.touched,
+            'has-success': c.touched && c.valid,
+            'has-error': c.touched && !c.valid
         };
     }
     private _createCurrentItem$(): Subject<NameListItem> {
@@ -116,13 +116,13 @@ export class NameListItemModalComponent {
     }
     private _rebuildForm(editMode: boolean): void{
         this._myForm = this._fb.group({
-            "firstName": ["", Validators.compose([Validators.required])],
-            "lastName": ["", Validators.compose([Validators.required])],
-            "email": ["", Validators.compose([Validators.required, CustomValidators.email])]
+            'firstName': ['', Validators.compose([Validators.required])],
+            'lastName': ['', Validators.compose([Validators.required])],
+            'email': ['', Validators.compose([Validators.required, CustomValidators.email])]
         });
-        this._firstName = this._myForm.controls["firstName"];
-        this._lastName = this._myForm.controls["lastName"];
-        this._email = this._myForm.controls["email"];
+        this._firstName = this._myForm.controls['firstName'];
+        this._lastName = this._myForm.controls['lastName'];
+        this._email = this._myForm.controls['email'];
         if (editMode) {
             this._firstName.markAsTouched();
             this._lastName.markAsTouched();

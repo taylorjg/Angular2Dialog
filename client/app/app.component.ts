@@ -1,17 +1,14 @@
-import {Component, ViewContainerRef} from "@angular/core";
-import {NameListComponent} from "./home/nameList.Component";
-import {NameListService} from "./home/nameList.service";
+import {Component, ViewContainerRef} from '@angular/core';
+import {NameListComponent} from './home/nameList.Component';
 
 @Component({
-    selector: "app",
+    selector: 'app',
     template: `
         <br />
         <br />
         <div class="container">
             <nameList></nameList>
-        </div>`,
-    directives: [NameListComponent],
-    providers: [NameListService]
+        </div>`
 })
 export class AppComponent {
     public viewContainerRef: ViewContainerRef;
