@@ -2,7 +2,7 @@ import {Component, ViewChild} from '@angular/core';
 import {Observer} from 'rxjs/Observer';
 import {NameListItem} from './nameListItem';
 import {NameListService} from './nameList.service';
-//import {NameListItemModalComponent} from './nameListItemModal.component';
+import {NameListItemModalComponent} from './nameListItemModal.component';
 
 @Component({
     selector: 'nameList',
@@ -43,10 +43,10 @@ import {NameListService} from './nameList.service';
             <button id="addItemBtn" class="btn btn-primary btn-sm" (click)="_onAddItem()">Add Item</button>
         </div>
     </div>
-    <!-- <nameListItemModal #mymodal></nameListItemModal> -->`
+    <nameListItemModal #mymodal></nameListItemModal>`
 })
 export class NameListComponent {
-    //@ViewChild('mymodal') private _mymodal: NameListItemModalComponent;
+    @ViewChild('mymodal') private _mymodal: NameListItemModalComponent;
     private _nameListItems: NameListItem[];
     private _serviceCallsInProgressCount = 0;
     private _serviceCallInProgress = false;
@@ -59,17 +59,17 @@ export class NameListComponent {
         this._nameListService.get().subscribe(observer);
     }
     private _onEditItem(oldItem: NameListItem) {
-        // let clone = this._cloneItem(oldItem);
-        // let subscription = this._mymodal.editItem(clone).subscribe(
-        //     newItem => {
-        //         let observer = this._makeObserver<any>('update', response => {
-        //             console.log(response);
-        //             this._getItems();
-        //         });
-        //         this._nameListService.update(newItem).subscribe(observer);
-        //     },
-        //     null,
-        //     () => subscription.unsubscribe());
+        let clone = this._cloneItem(oldItem);
+        let subscription = this._mymodal.editItem(clone).subscribe(
+            newItem => {
+                let observer = this._makeObserver<any>('update', response => {
+                    console.log(response);
+                    this._getItems();
+                });
+                this._nameListService.update(newItem).subscribe(observer);
+            },
+            null,
+            () => subscription.unsubscribe());
     }
     private _onDeleteItem(oldItem: NameListItem) {
         let observer = this._makeObserver<any>('delete', response => {
@@ -79,16 +79,16 @@ export class NameListComponent {
         this._nameListService.delete(oldItem).subscribe(observer);
     }
     private _onAddItem() {
-        // let subscription = this._mymodal.newItem().subscribe(
-        //     newItem => {
-        //         let observer = this._makeObserver<any>('create', response => {
-        //             console.log(response);
-        //             this._getItems();
-        //         });
-        //         this._nameListService.create(newItem).subscribe(observer);
-        //     },
-        //     null,
-        //     () => subscription.unsubscribe());
+        let subscription = this._mymodal.newItem().subscribe(
+            newItem => {
+                let observer = this._makeObserver<any>('create', response => {
+                    console.log(response);
+                    this._getItems();
+                });
+                this._nameListService.create(newItem).subscribe(observer);
+            },
+            null,
+            () => subscription.unsubscribe());
     }
     private _cloneItem(item: NameListItem) {
         return new NameListItem(item.id, item.firstName, item.lastName, item.email);

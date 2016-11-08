@@ -1,5 +1,4 @@
 import {Component, ViewContainerRef} from '@angular/core';
-import {NameListComponent} from './home/nameList.Component';
 
 @Component({
     selector: 'app',
@@ -11,6 +10,7 @@ import {NameListComponent} from './home/nameList.Component';
         </div>`
 })
 export class AppComponent {
+    // You need this small hack in order to catch application root view container ref
     public viewContainerRef: ViewContainerRef;
     public constructor(viewContainerRef: ViewContainerRef) {
         this.viewContainerRef = viewContainerRef;
