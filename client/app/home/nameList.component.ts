@@ -1,11 +1,11 @@
-import {Component, ViewChild} from "@angular/core";
-import {Observer} from "rxjs/Observer";
-import {NameListItem} from "./nameListItem";
-import {NameListService} from "./nameList.service";
-import {NameListItemModalComponent} from "./nameListItemModal.component";
+import {Component, ViewChild} from '@angular/core';
+import {Observer} from 'rxjs/Observer';
+import {NameListItem} from './nameListItem';
+import {NameListService} from './nameList.service';
+import {NameListItemModalComponent} from './nameListItemModal.component';
 
 @Component({
-    selector: "nameList",
+    selector: 'nameList',
     template: 
     `<div class="row">
         <div class="col-md-offset-1 col-md-10">
@@ -43,27 +43,26 @@ import {NameListItemModalComponent} from "./nameListItemModal.component";
             <button id="addItemBtn" class="btn btn-primary btn-sm" (click)="_onAddItem()">Add Item</button>
         </div>
     </div>
-    <nameListItemModal #mymodal></nameListItemModal>`,
-    directives: [NameListItemModalComponent]
+    <nameListItemModal #mymodal></nameListItemModal>`
 })
 export class NameListComponent {
-    @ViewChild("mymodal") private _mymodal: NameListItemModalComponent;
+    @ViewChild('mymodal') private _mymodal: NameListItemModalComponent;
     private _nameListItems: NameListItem[];
     private _serviceCallsInProgressCount = 0;
     private _serviceCallInProgress = false;
-    private _serviceCallErrorMessage = "";
+    private _serviceCallErrorMessage = '';
     constructor(private _nameListService: NameListService) {
         this._getItems();
     }
     private _getItems() {
-        let observer = this._makeObserver<NameListItem[]>("get", arr => this._nameListItems = arr);
+        let observer = this._makeObserver<NameListItem[]>('get', arr => this._nameListItems = arr);
         this._nameListService.get().subscribe(observer);
     }
     private _onEditItem(oldItem: NameListItem) {
         let clone = this._cloneItem(oldItem);
         let subscription = this._mymodal.editItem(clone).subscribe(
             newItem => {
-                let observer = this._makeObserver<any>("update", response => {
+                let observer = this._makeObserver<any>('update', response => {
                     console.log(response);
                     this._getItems();
                 });
@@ -73,7 +72,7 @@ export class NameListComponent {
             () => subscription.unsubscribe());
     }
     private _onDeleteItem(oldItem: NameListItem) {
-        let observer = this._makeObserver<any>("delete", response => {
+        let observer = this._makeObserver<any>('delete', response => {
             console.log(response);
             this._getItems();
         });
@@ -82,7 +81,7 @@ export class NameListComponent {
     private _onAddItem() {
         let subscription = this._mymodal.newItem().subscribe(
             newItem => {
-                let observer = this._makeObserver<any>("create", response => {
+                let observer = this._makeObserver<any>('create', response => {
                     console.log(response);
                     this._getItems();
                 });
@@ -96,7 +95,7 @@ export class NameListComponent {
     }
     private _makeObserver<T>(serviceMethod: string, next: (value: T) => void): Observer<T> {
         this._incrementServiceCallsInProgressCount();
-        this._serviceCallErrorMessage = "";
+        this._serviceCallErrorMessage = '';
         return {
             next: next,
             error: response => {
@@ -105,7 +104,7 @@ export class NameListComponent {
             },
             complete: () => {
                 this._decrementServiceCallsInProgressCount();
-                this._serviceCallErrorMessage = "";
+                this._serviceCallErrorMessage = '';
             }
         };
     }

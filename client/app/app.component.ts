@@ -1,19 +1,16 @@
-import {Component, ViewContainerRef} from "@angular/core";
-import {NameListComponent} from "./home/nameList.Component";
-import {NameListService} from "./home/nameList.service";
+import {Component, ViewContainerRef} from '@angular/core';
 
 @Component({
-    selector: "app",
+    selector: 'app',
     template: `
         <br />
         <br />
         <div class="container">
             <nameList></nameList>
-        </div>`,
-    directives: [NameListComponent],
-    providers: [NameListService]
+        </div>`
 })
 export class AppComponent {
+    // You need this small hack in order to catch application root view container ref
     public viewContainerRef: ViewContainerRef;
     public constructor(viewContainerRef: ViewContainerRef) {
         this.viewContainerRef = viewContainerRef;
