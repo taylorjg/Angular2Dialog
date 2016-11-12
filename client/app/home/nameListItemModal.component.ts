@@ -12,43 +12,43 @@ import {CustomValidators} from './customValidators';
     <div bsModal #modal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form [formGroup]="_myForm" (ngSubmit)="_onSubmit()" novalidate>
+                <form [formGroup]="myForm" (ngSubmit)="onSubmit()" novalidate>
 
                     <div class="modal-header">
                         <button type="button" class="close" (click)="modal.hide()" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
-                        <h2 class="modal-title">{{_title}}</h2>
+                        <h2 class="modal-title">{{title}}</h2>
                     </div>
 
                     <div class="modal-body">
-                        <div class="form-group" [ngClass]="_setFeedbackClasses(_firstName)">
+                        <div class="form-group" [ngClass]="setFeedbackClasses(firstName)">
                             <label class="control-label" for="firstName">First name</label>
-                            <input type="text" id="firstName" name="firstName" class="form-control" [formControl]="_firstName" [(ngModel)]="_item.firstName">
-                            <span *ngIf="_firstName.valid && _firstName.touched" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
-                            <span *ngIf="!_firstName.valid && _firstName.touched" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
-                            <div *ngIf="_firstName.hasError('required') && _firstName.touched" class="help-block">Please enter your first name</div> 
+                            <input type="text" id="firstName" name="firstName" class="form-control" [formControl]="firstName" [(ngModel)]="item.firstName">
+                            <span *ngIf="firstName.valid && firstName.touched" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+                            <span *ngIf="!firstName.valid && firstName.touched" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                            <div *ngIf="firstName.hasError('required') && firstName.touched" class="help-block">Please enter your first name</div> 
                         </div>
-                        <div class="form-group" [ngClass]="_setFeedbackClasses(_lastName)">
+                        <div class="form-group" [ngClass]="setFeedbackClasses(lastName)">
                             <label class="control-label" for="lastName">Last name</label>
-                            <input type="text" id="lastName" name="lastName" class="form-control" [formControl]="_lastName" [(ngModel)]="_item.lastName">
-                            <span *ngIf="_lastName.valid && _lastName.touched" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
-                            <span *ngIf="!_lastName.valid && _lastName.touched" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
-                            <div *ngIf="_lastName.hasError('required') && _lastName.touched" class="help-block">Please enter your last name</div> 
+                            <input type="text" id="lastName" name="lastName" class="form-control" [formControl]="lastName" [(ngModel)]="item.lastName">
+                            <span *ngIf="lastName.valid && lastName.touched" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+                            <span *ngIf="!lastName.valid && lastName.touched" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                            <div *ngIf="lastName.hasError('required') && lastName.touched" class="help-block">Please enter your last name</div> 
                         </div>
-                        <div class="form-group" [ngClass]="_setFeedbackClasses(_email)">
+                        <div class="form-group" [ngClass]="setFeedbackClasses(email)">
                             <label class="control-label" for="email">Email</label>
-                            <input type="email" id="email" name="email" class="form-control" [formControl]="_email" [(ngModel)]="_item.email">
-                            <span *ngIf="_email.valid && _email.touched" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
-                            <span *ngIf="!_email.valid && _email.touched" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
-                            <div *ngIf="_email.hasError('required') && _email.touched" class="help-block">Please enter your email address</div> 
-                            <div *ngIf="_email.hasError('email') && _email.touched" class="help-block">Please enter a valid email address</div> 
+                            <input type="email" id="email" name="email" class="form-control" [formControl]="email" [(ngModel)]="item.email">
+                            <span *ngIf="email.valid && email.touched" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
+                            <span *ngIf="!email.valid && email.touched" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
+                            <div *ngIf="email.hasError('required') && email.touched" class="help-block">Please enter your email address</div> 
+                            <div *ngIf="email.hasError('email') && email.touched" class="help-block">Please enter a valid email address</div> 
                         </div>
                     </div>
 
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-sm btn-primary">Save</button>
-                        <button type="button" class="btn btn-sm" (click)="_onCancel()">Cancel</button>
+                        <button type="button" class="btn btn-sm" (click)="onCancel()">Cancel</button>
                     </div>
                 
                 </form>
@@ -57,72 +57,72 @@ import {CustomValidators} from './customValidators';
     </div>`
 })
 export class NameListItemModalComponent {
-    @ViewChild('modal') private _modal: ModalDirective;
-    private _myForm: FormGroup;
-    private _firstName: AbstractControl;
-    private _lastName: AbstractControl;
-    private _email: AbstractControl;
-    private _title: string = '';
-    private _item: NameListItem = null;
-    private _currentItem$: Subject<NameListItem>= null;
-    constructor(private _fb: FormBuilder) {
-        this._item = new NameListItem();
-        this._rebuildForm(false);
+    @ViewChild('modal') private modal: ModalDirective;
+    private myForm: FormGroup;
+    private firstName: AbstractControl;
+    private lastName: AbstractControl;
+    private email: AbstractControl;
+    private title: string = '';
+    private item: NameListItem = null;
+    private currentItem$: Subject<NameListItem>= null;
+    constructor(private formBuilder: FormBuilder) {
+        this.item = new NameListItem();
+        this.buildForm(false);
     }
     public editItem(item: NameListItem): Observable<NameListItem> {
-        this._item = item;
-        this._rebuildForm(true);
-        this._title = `Edit Item ${item.id}`;
-        this._modal.show();
-        return this._createCurrentItem$();
+        this.item = item;
+        this.buildForm(true);
+        this.title = `Edit Item ${item.id}`;
+        this.modal.show();
+        return this.createCurrentItem$();
     }
     public newItem(): Observable<NameListItem> {
-        this._item = new NameListItem();
-        this._rebuildForm(false);
-        this._title = 'New Item';
-        this._modal.show();
-        return this._createCurrentItem$();
+        this.item = new NameListItem();
+        this.buildForm(false);
+        this.title = 'New Item';
+        this.modal.show();
+        return this.createCurrentItem$();
     }
-    private _onSubmit() {
-        if (this._myForm.valid) {
-            this._currentItem$.next(this._item);
-            this._currentItem$.complete();
-            this._currentItem$ = null;
-            this._modal.hide();
+    private onSubmit() {
+        if (this.myForm.valid) {
+            this.currentItem$.next(this.item);
+            this.currentItem$.complete();
+            this.currentItem$ = null;
+            this.modal.hide();
         }
     }
-    private _onCancel() {
-        this._currentItem$.complete();
-        this._currentItem$ = null;
-        this._modal.hide();
+    private onCancel() {
+        this.currentItem$.complete();
+        this.currentItem$ = null;
+        this.modal.hide();
     }
-    private _setFeedbackClasses(c: AbstractControl) {
+    private setFeedbackClasses(c: AbstractControl) {
         return {
             'has-feedback': c.touched,
             'has-success': c.touched && c.valid,
             'has-error': c.touched && !c.valid
         };
     }
-    private _createCurrentItem$(): Subject<NameListItem> {
-        if (this._currentItem$) {
-            this._currentItem$.complete();
+    private createCurrentItem$(): Subject<NameListItem> {
+        if (this.currentItem$) {
+            this.currentItem$.complete();
         }
-        this._currentItem$ = new Subject<NameListItem>();
-        return this._currentItem$;
+        this.currentItem$ = new Subject<NameListItem>();
+        return this.currentItem$;
     }
-    private _rebuildForm(editMode: boolean): void {
-        this._myForm = this._fb.group({
-            'firstName': [this._item.firstName, Validators.compose([Validators.required])],
-            'lastName': [this._item.lastName, Validators.compose([Validators.required])],
-            'email': [this._item.email, Validators.compose([Validators.required, CustomValidators.email])]
+    private buildForm(editMode: boolean): void {
+        this.myForm = this.formBuilder.group({
+            'firstName': [this.item.firstName, Validators.compose([Validators.required])],
+            'lastName': [this.item.lastName, Validators.compose([Validators.required])],
+            'email': [this.item.email, Validators.compose([Validators.required, CustomValidators.email])]
         });
-        this._firstName = this._myForm.controls['firstName'];
-        this._lastName = this._myForm.controls['lastName'];
-        this._email = this._myForm.controls['email'];
+        this.firstName = this.myForm.controls['firstName'];
+        this.lastName = this.myForm.controls['lastName'];
+        this.email = this.myForm.controls['email'];
         if (editMode) {
-            this._firstName.markAsTouched();
-            this._lastName.markAsTouched();
-            this._email.markAsTouched();
+            this.firstName.markAsTouched();
+            this.lastName.markAsTouched();
+            this.email.markAsTouched();
         }
     }
 }

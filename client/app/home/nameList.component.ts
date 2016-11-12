@@ -9,12 +9,12 @@ import {NameListItemModalComponent} from './nameListItemModal.component';
     template: 
     `<div class="row">
         <div class="col-md-offset-1 col-md-10">
-            <div *ngIf="_serviceCallInProgress" class="progress">
+            <div *ngIf="serviceCallInProgress" class="progress">
                 <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
                 </div>
             </div>
-            <div *ngIf="_serviceCallErrorMessage" class="alert alert-danger" role="alert">
-                {{ _serviceCallErrorMessage }}
+            <div *ngIf="serviceCallErrorMessage" class="alert alert-danger" role="alert">
+                {{ serviceCallErrorMessage }}
             </div>
             <table class="table table-striped table-condensed table-bordered">
                 <thead>
@@ -27,95 +27,95 @@ import {NameListItemModalComponent} from './nameListItemModal.component';
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let item of _nameListItems">
+                    <tr *ngFor="let item of nameListItems">
                         <td>{{item.id}}</td>
                         <td>{{item.firstName}}</td>
                         <td>{{item.lastName}}</td>
                         <td>{{item.email}}</td>
                         <td>
-                            <button class="btn btn-primary btn-sm editBtn" (click)="_onEditItem(item)">Edit</button>
-                            <button class="btn btn-danger btn-sm deleteBtn" (click)="_onDeleteItem(item)">Delete</button>
+                            <button class="btn btn-primary btn-sm editBtn" (click)="onEditItem(item)">Edit</button>
+                            <button class="btn btn-danger btn-sm deleteBtn" (click)="onDeleteItem(item)">Delete</button>
                         </td>
                     </tr>
                 </tbody>
             </table>
             <hr />
-            <button id="addItemBtn" class="btn btn-primary btn-sm" (click)="_onAddItem()">Add Item</button>
+            <button id="addItemBtn" class="btn btn-primary btn-sm" (click)="onAddItem()">Add Item</button>
         </div>
     </div>
     <nameListItemModal #mymodal></nameListItemModal>`
 })
 export class NameListComponent {
-    @ViewChild('mymodal') private _mymodal: NameListItemModalComponent;
-    private _nameListItems: NameListItem[];
-    private _serviceCallsInProgressCount = 0;
-    private _serviceCallInProgress = false;
-    private _serviceCallErrorMessage = '';
-    constructor(private _nameListService: NameListService) {
-        this._getItems();
+    @ViewChild('mymodal') private mymodal: NameListItemModalComponent;
+    private nameListItems: NameListItem[];
+    private serviceCallsInProgressCount = 0;
+    private serviceCallInProgress = false;
+    private serviceCallErrorMessage = '';
+    constructor(private nameListService: NameListService) {
+        this.getItems();
     }
-    private _getItems() {
-        let observer = this._makeObserver<NameListItem[]>('get', arr => this._nameListItems = arr);
-        this._nameListService.get().subscribe(observer);
+    private getItems() {
+        let observer = this.makeObserver<NameListItem[]>('get', arr => this.nameListItems = arr);
+        this.nameListService.get().subscribe(observer);
     }
-    private _onEditItem(oldItem: NameListItem) {
-        let clone = this._cloneItem(oldItem);
-        let subscription = this._mymodal.editItem(clone).subscribe(
+    private onEditItem(oldItem: NameListItem) {
+        let clone = this.cloneItem(oldItem);
+        let subscription = this.mymodal.editItem(clone).subscribe(
             newItem => {
-                let observer = this._makeObserver<any>('update', response => {
+                let observer = this.makeObserver<any>('update', response => {
                     console.log(response);
-                    this._getItems();
+                    this.getItems();
                 });
-                this._nameListService.update(newItem).subscribe(observer);
+                this.nameListService.update(newItem).subscribe(observer);
             },
             null,
             () => subscription.unsubscribe());
     }
-    private _onDeleteItem(oldItem: NameListItem) {
-        let observer = this._makeObserver<any>('delete', response => {
+    private onDeleteItem(oldItem: NameListItem) {
+        let observer = this.makeObserver<any>('delete', response => {
             console.log(response);
-            this._getItems();
+            this.getItems();
         });
-        this._nameListService.delete(oldItem).subscribe(observer);
+        this.nameListService.delete(oldItem).subscribe(observer);
     }
-    private _onAddItem() {
-        let subscription = this._mymodal.newItem().subscribe(
+    private onAddItem() {
+        let subscription = this.mymodal.newItem().subscribe(
             newItem => {
-                let observer = this._makeObserver<any>('create', response => {
+                let observer = this.makeObserver<any>('create', response => {
                     console.log(response);
-                    this._getItems();
+                    this.getItems();
                 });
-                this._nameListService.create(newItem).subscribe(observer);
+                this.nameListService.create(newItem).subscribe(observer);
             },
             null,
             () => subscription.unsubscribe());
     }
-    private _cloneItem(item: NameListItem) {
+    private cloneItem(item: NameListItem) {
         return new NameListItem(item.id, item.firstName, item.lastName, item.email);
     }
-    private _makeObserver<T>(serviceMethod: string, next: (value: T) => void): Observer<T> {
-        this._incrementServiceCallsInProgressCount();
-        this._serviceCallErrorMessage = '';
+    private makeObserver<T>(serviceMethod: string, next: (value: T) => void): Observer<T> {
+        this.incrementServiceCallsInProgressCount();
+        this.serviceCallErrorMessage = '';
         return {
             next: next,
             error: response => {
-                this._decrementServiceCallsInProgressCount();
-                this._serviceCallErrorMessage = `Call to ${serviceMethod} failed (${response.status} ${response.text()}).`;
+                this.decrementServiceCallsInProgressCount();
+                this.serviceCallErrorMessage = `Call to ${serviceMethod} failed (${response.status} ${response.text()}).`;
             },
             complete: () => {
-                this._decrementServiceCallsInProgressCount();
-                this._serviceCallErrorMessage = '';
+                this.decrementServiceCallsInProgressCount();
+                this.serviceCallErrorMessage = '';
             }
         };
     }
-    private _incrementServiceCallsInProgressCount() {
-        this._changeServiceCallsInProgressCount(+1);
+    private incrementServiceCallsInProgressCount() {
+        this.changeServiceCallsInProgressCount(+1);
     }
-    private _decrementServiceCallsInProgressCount() {
-        this._changeServiceCallsInProgressCount(-1);
+    private decrementServiceCallsInProgressCount() {
+        this.changeServiceCallsInProgressCount(-1);
     }
-    private _changeServiceCallsInProgressCount(delta: number) {
-        this._serviceCallsInProgressCount += delta;
-        this._serviceCallInProgress = (this._serviceCallsInProgressCount > 0);
+    private changeServiceCallsInProgressCount(delta: number) {
+        this.serviceCallsInProgressCount += delta;
+        this.serviceCallInProgress = (this.serviceCallsInProgressCount > 0);
     }
 }
