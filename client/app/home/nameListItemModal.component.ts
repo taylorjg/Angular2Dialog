@@ -22,21 +22,21 @@ import {CustomValidators} from './customValidators';
                     </div>
 
                     <div class="modal-body">
-                        <div class="form-group" [ngClass]="setFeedbackClasses(firstName)">
+                        <div class="form-group" [ngClass]="feedbackClasses(firstName)">
                             <label class="control-label" for="firstName">First name</label>
                             <input type="text" id="firstName" name="firstName" class="form-control" [formControl]="firstName" [(ngModel)]="item.firstName">
                             <span *ngIf="firstName.valid && firstName.touched" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
                             <span *ngIf="!firstName.valid && firstName.touched" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
                             <div *ngIf="firstName.hasError('required') && firstName.touched" class="help-block">Please enter your first name</div> 
                         </div>
-                        <div class="form-group" [ngClass]="setFeedbackClasses(lastName)">
+                        <div class="form-group" [ngClass]="feedbackClasses(lastName)">
                             <label class="control-label" for="lastName">Last name</label>
                             <input type="text" id="lastName" name="lastName" class="form-control" [formControl]="lastName" [(ngModel)]="item.lastName">
                             <span *ngIf="lastName.valid && lastName.touched" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
                             <span *ngIf="!lastName.valid && lastName.touched" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
                             <div *ngIf="lastName.hasError('required') && lastName.touched" class="help-block">Please enter your last name</div> 
                         </div>
-                        <div class="form-group" [ngClass]="setFeedbackClasses(email)">
+                        <div class="form-group" [ngClass]="feedbackClasses(email)">
                             <label class="control-label" for="email">Email</label>
                             <input type="email" id="email" name="email" class="form-control" [formControl]="email" [(ngModel)]="item.email">
                             <span *ngIf="email.valid && email.touched" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
@@ -96,7 +96,7 @@ export class NameListItemModalComponent {
         this.currentItem$ = null;
         this.modal.hide();
     }
-    private setFeedbackClasses(c: AbstractControl) {
+    private feedbackClasses(c: AbstractControl) {
         return {
             'has-feedback': c.touched,
             'has-success': c.touched && c.valid,
