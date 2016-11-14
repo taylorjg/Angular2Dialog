@@ -1,12 +1,14 @@
-import {Component, ViewChild} from '@angular/core';
-import {Observer} from 'rxjs/Observer';
-import {NameListItem} from './nameListItem';
-import {NameListService} from './nameList.service';
-import {NameListItemModalComponent} from './nameListItemModal.component';
+import { Component, ViewChild } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Observer } from 'rxjs/Observer';
+import { Response } from "@angular/http";
+import { NameListItem } from './nameListItem';
+import { NameListService } from './nameList.service';
+import { NameListItemModalContentComponent } from './nameListItemModalContent.component';
 
 @Component({
     selector: 'nameList',
-    template: 
+    template:
     `<div class="row">
         <div class="col-md-offset-1 col-md-10">
             <div *ngIf="serviceCallInProgress" class="progress">
@@ -43,15 +45,14 @@ import {NameListItemModalComponent} from './nameListItemModal.component';
             <button id="addItemBtn" class="btn btn-primary btn-sm" (click)="onAddItem()">Add Item</button>
         </div>
     </div>
-    <nameListItemModal #mymodal></nameListItemModal>`
+    <template ngbModalContainer></template>`
 })
 export class NameListComponent {
-    @ViewChild('mymodal') private mymodal: NameListItemModalComponent;
     private nameListItems: NameListItem[];
     private serviceCallsInProgressCount = 0;
     private serviceCallInProgress = false;
     private serviceCallErrorMessage = '';
-    constructor(private nameListService: NameListService) {
+    constructor(private modalService: NgbModal, private nameListService: NameListService) {
         this.getItems();
     }
     private getItems() {
@@ -60,35 +61,41 @@ export class NameListComponent {
     }
     private onEditItem(oldItem: NameListItem) {
         let clone = this.cloneItem(oldItem);
-        let subscription = this.mymodal.editItem(clone).subscribe(
-            newItem => {
-                let observer = this.makeObserver<any>('update', response => {
+        const modalRef = this.modalService.open(NameListItemModalContentComponent);
+        modalRef.componentInstance.item = clone;
+        modalRef.componentInstance.editMode = true;
+        modalRef.result
+            .then(updatedItem => {
+                let observer = this.makeObserver<Response>('update', response => {
                     console.log(response);
                     this.getItems();
                 });
-                this.nameListService.update(newItem).subscribe(observer);
-            },
-            null,
-            () => subscription.unsubscribe());
+                this.nameListService.update(updatedItem).subscribe(observer);
+            })
+            .catch(_ => {
+            });
     }
     private onDeleteItem(oldItem: NameListItem) {
-        let observer = this.makeObserver<any>('delete', response => {
+        let observer = this.makeObserver<Response>('delete', response => {
             console.log(response);
             this.getItems();
         });
         this.nameListService.delete(oldItem).subscribe(observer);
     }
     private onAddItem() {
-        let subscription = this.mymodal.newItem().subscribe(
-            newItem => {
-                let observer = this.makeObserver<any>('create', response => {
+        const modalRef = this.modalService.open(NameListItemModalContentComponent);
+        modalRef.componentInstance.item = new NameListItem();
+        modalRef.componentInstance.editMode = false;
+        modalRef.result
+            .then(newItem => {
+                let observer = this.makeObserver<Response>('create', response => {
                     console.log(response);
                     this.getItems();
                 });
                 this.nameListService.create(newItem).subscribe(observer);
-            },
-            null,
-            () => subscription.unsubscribe());
+            })
+            .catch(_ => {
+            });
     }
     private cloneItem(item: NameListItem) {
         return new NameListItem(item.id, item.firstName, item.lastName, item.email);

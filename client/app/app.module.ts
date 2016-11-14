@@ -5,7 +5,7 @@ import {HttpModule} from '@angular/http';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {AppComponent} from './app.component';
 import {NameListComponent} from './home/nameList.component';
-import {NameListItemModalComponent} from './home/nameListItemModal.component';
+import {NameListItemModalContentComponent} from './home/nameListItemModalContent.component';
 import {NameListService} from './home/nameList.service';
 
 @NgModule({
@@ -18,7 +18,8 @@ import {NameListService} from './home/nameList.service';
     declarations: [
         AppComponent,
         NameListComponent,
-        NameListItemModalComponent],
+        NameListItemModalContentComponent],
+    entryComponents: [NameListItemModalContentComponent],
     providers: [NameListService],
     bootstrap: [AppComponent]
 })
