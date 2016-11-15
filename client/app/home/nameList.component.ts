@@ -63,7 +63,6 @@ export class NameListComponent {
         let clone = this.cloneItem(oldItem);
         const modalRef = this.modalService.open(NameListItemModalContentComponent);
         modalRef.componentInstance.item = clone;
-        modalRef.componentInstance.editMode = true;
         modalRef.result
             .then(updatedItem => {
                 let observer = this.makeObserver<Response>('update', response => {
@@ -85,7 +84,6 @@ export class NameListComponent {
     private onAddItem() {
         const modalRef = this.modalService.open(NameListItemModalContentComponent);
         modalRef.componentInstance.item = new NameListItem();
-        modalRef.componentInstance.editMode = false;
         modalRef.result
             .then(newItem => {
                 let observer = this.makeObserver<Response>('create', response => {

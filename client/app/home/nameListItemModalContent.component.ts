@@ -1,8 +1,8 @@
-import {Component, Input} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, AbstractControl, Validators} from '@angular/forms';
-import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
-import {NameListItem} from './nameListItem';
-import {CustomValidators} from './customValidators';
+import { Component, Input, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, AbstractControl, Validators } from '@angular/forms';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { NameListItem } from './nameListItem';
+import { CustomValidators } from './customValidators';
 
 @Component({
     selector: 'nameListItemModalContent',
@@ -48,16 +48,18 @@ import {CustomValidators} from './customValidators';
         
         </form>`
 })
-export class NameListItemModalContentComponent {
+export class NameListItemModalContentComponent implements OnInit {
     private form: FormGroup;
     private firstName: AbstractControl;
     private lastName: AbstractControl;
     private email: AbstractControl;
-    private title: string = '';
-    @Input() item: NameListItem;
-    @Input() editMode: Boolean;
+    private title: string;
+    @Input('item') item: NameListItem;
     constructor(private activeModal: NgbActiveModal, private formBuilder: FormBuilder) {
-        this.buildForm(false);
+    }
+    ngOnInit() {
+        this.title = (this.item.id >= 0) ? `Edit Item ${this.item.id}` : 'New Item';
+        this.buildForm();
     }
     private onSubmit() {
         if (this.form.valid) {
@@ -65,7 +67,7 @@ export class NameListItemModalContentComponent {
         }
     }
     private onCancel() {
-        this.activeModal.dismiss(null);
+        this.activeModal.dismiss();
     }
     private feedbackClasses(c: AbstractControl) {
         return {
@@ -74,19 +76,16 @@ export class NameListItemModalContentComponent {
             'has-error': c.touched && !c.valid
         };
     }
-    private buildForm(editMode: boolean): void {
+    private buildForm(): void {
         this.form = this.formBuilder.group({
-            // 'firstName': [this.item.firstName, Validators.compose([Validators.required])],
-            // 'lastName': [this.item.lastName, Validators.compose([Validators.required])],
-            // 'email': [this.item.email, Validators.compose([Validators.required, CustomValidators.email])]
-            'firstName': ['', Validators.compose([Validators.required])],
-            'lastName': ['', Validators.compose([Validators.required])],
-            'email': ['', Validators.compose([Validators.required, CustomValidators.email])]
+            'firstName': [this.item.firstName, Validators.compose([Validators.required])],
+            'lastName': [this.item.lastName, Validators.compose([Validators.required])],
+            'email': [this.item.email, Validators.compose([Validators.required, CustomValidators.email])]
         });
         this.firstName = this.form.controls['firstName'];
         this.lastName = this.form.controls['lastName'];
         this.email = this.form.controls['email'];
-        if (editMode) {
+        if (this.item.id >= 0) {
             this.firstName.markAsTouched();
             this.lastName.markAsTouched();
             this.email.markAsTouched();
