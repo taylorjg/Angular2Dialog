@@ -66,7 +66,6 @@ export class NameListComponent {
         modalRef.result
             .then(updatedItem => {
                 let observer = this.makeObserver<Response>('update', response => {
-                    console.log(response);
                     this.getItems();
                 });
                 this.nameListService.update(updatedItem).subscribe(observer);
@@ -76,7 +75,6 @@ export class NameListComponent {
     }
     private onDeleteItem(oldItem: NameListItem) {
         let observer = this.makeObserver<Response>('delete', response => {
-            console.log(response);
             this.getItems();
         });
         this.nameListService.delete(oldItem).subscribe(observer);
@@ -87,7 +85,6 @@ export class NameListComponent {
         modalRef.result
             .then(newItem => {
                 let observer = this.makeObserver<Response>('create', response => {
-                    console.log(response);
                     this.getItems();
                 });
                 this.nameListService.create(newItem).subscribe(observer);
