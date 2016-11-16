@@ -21,4 +21,4 @@ A few things will be different:
 ## Links
 
 * [angular](https://angular.io/)
-* [ng2-bootstrap](https://github.com/valor-software/ng2-bootstrap)
+* [ng-bootstrap](https://ng-bootstrap.github.io)
