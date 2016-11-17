@@ -101,7 +101,14 @@ export class NameListComponent {
             });
     }
     private cloneItem(item: NameListItem) {
-        return new NameListItem(item.id, item.firstName, item.lastName, item.email);
+        return new NameListItem(
+            item.id,
+            item.firstName,
+            item.lastName,
+            item.email,
+            item.readUri,
+            item.updateUri,
+            item.deleteUri);
     }
     private makeObserver<T>(serviceMethod: string, next: (value: T) => void): Observer<T> {
         this.incrementServiceCallsInProgressCount();

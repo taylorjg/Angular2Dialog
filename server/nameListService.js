@@ -15,11 +15,11 @@ function createItem(req, res, _) {
         email: req.body.email
     };
     nameList.push(item);
-    sendJsonResponse(res, 201, item);   
+    sendJsonResponse(res, 201, addHypermediaLinks(req, item));   
 }
 
 function readAllItems(req, res, _) {
-    sendJsonResponse(res, 200, nameList);   
+    sendJsonResponse(res, 200, nameList.map(item => addHypermediaLinks(req, item)));   
 }
 
 function readItem(req, res, _) {
@@ -40,7 +40,7 @@ function updateItem(req, res, _) {
         item.firstName = req.body.firstName;
         item.lastName = req.body.lastName;
         item.email = req.body.email;
-        sendJsonResponse(res, 200, item);
+        sendJsonResponse(res, 200, addHypermediaLinks(req, item));
     }
     else {
         sendStatusResponse(res, 404);
@@ -61,6 +61,21 @@ function deleteItem(req, res, _) {
 
 function elementWithId(id) {
     return e => e.id === id;
+}
+
+function addHypermediaLinks(req, item) {
+    const clonedItem = Object.assign({}, item);
+    const baseUri = getBaseUri(req);
+    const uri = `${baseUri}/${item.id}`;
+    clonedItem.readUri = uri;
+    clonedItem.updateUri = uri;
+    clonedItem.deleteUri = uri;
+    return clonedItem;
+}
+
+function getBaseUri(req) {
+    const baseUri = req.protocol + '://' + req.get('host') + req.baseUrl;
+    return baseUri;
 }
 
 function findItem(id) {
