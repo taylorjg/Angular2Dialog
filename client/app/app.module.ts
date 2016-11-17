@@ -6,6 +6,7 @@ import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {AppComponent} from './app.component';
 import {NameListComponent} from './home/nameList.component';
 import {NameListItemModalContentComponent} from './home/nameListItemModalContent.component';
+import {VersionService} from './home/version.service';
 import {NameListService} from './home/nameList.service';
 
 @NgModule({
@@ -20,7 +21,7 @@ import {NameListService} from './home/nameList.service';
         NameListComponent,
         NameListItemModalContentComponent],
     entryComponents: [NameListItemModalContentComponent],
-    providers: [NameListService],
+    providers: [VersionService, NameListService],
     bootstrap: [AppComponent]
 })
 export class AppModule {
