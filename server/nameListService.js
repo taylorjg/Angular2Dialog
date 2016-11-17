@@ -59,22 +59,16 @@ function deleteItem(req, res, _) {
     }
 }
 
+function elementWithId(id) {
+    return e => e.id === id;
+}
+
 function findItem(id) {
-    // TODO: use ES2015 array functions.
-    for (var i = 0; i < nameList.length; i++) {
-        var item = nameList[i];
-        if (item.id === id) return item;
-    }
-    return null;
+    return nameList.find(elementWithId(id));
 }
 
 function findItemIndex(id) {
-    // TODO: use ES2015 array functions.
-    for (var i = 0; i < nameList.length; i++) {
-        var item = nameList[i];
-        if (item.id === id) return i;
-    }
-    return -1;
+    return nameList.findIndex(elementWithId(id));
 }
 
 function sendJsonResponse(res, status, content) {

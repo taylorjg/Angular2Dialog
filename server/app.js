@@ -2,20 +2,24 @@ const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
 const port = process.env.PORT || 3000;
+const versionService = require('./versionService');
 const nameListService = require('./nameListService');
 
-const apiRouter = express.Router();
-apiRouter.post('/', nameListService.createItem);
-apiRouter.get('/', nameListService.readAllItems);
-apiRouter.get('/:id', nameListService.readItem);
-apiRouter.post('/:id', nameListService.updateItem);
-apiRouter.delete('/:id', nameListService.deleteItem);
+const versionServiceRouter = express.Router();
+versionServiceRouter.get('/', versionService.getVersion);
+
+const nameListServiceRouter = express.Router();
+nameListServiceRouter.post('/', nameListService.createItem);
+nameListServiceRouter.get('/', nameListService.readAllItems);
+nameListServiceRouter.get('/:id', nameListService.readItem);
+nameListServiceRouter.post('/:id', nameListService.updateItem);
+nameListServiceRouter.delete('/:id', nameListService.deleteItem);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// TODO: use __dirname__ ?
-app.use('/', express.static('server/public'));
-app.use('/api', apiRouter);
+app.use('/', express.static(`${__dirname}/public`));
+app.use('/api/version', versionServiceRouter);
+app.use('/api/nameList', nameListServiceRouter);
 
 app.listen(port, () => console.log(`Listening on port ${port}`));

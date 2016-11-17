@@ -14,7 +14,7 @@ export class NameListService {
     }
     get(): Observable<NameListItem[]> {
         return this.http
-            .get('/api')
+            .get('/api/nameList')
             .delay(SIMULATED_NETWORK_DELAY)
             .map((response: Response) => <NameListItem[]>response.json());
     }
@@ -23,7 +23,7 @@ export class NameListService {
         headers.append('Content-Type', 'application/json');
         let options = { headers: headers };
         return this.http
-            .post('/api', JSON.stringify(item), options)
+            .post('/api/nameList', JSON.stringify(item), options)
             .delay(SIMULATED_NETWORK_DELAY);
     }
     update(item: NameListItem): Observable<Response> {
@@ -31,12 +31,12 @@ export class NameListService {
         headers.append('Content-Type', 'application/json');
         let options = { headers: headers };
         return this.http
-            .post(`/api/${item.id}`, JSON.stringify(item), options)
+            .post(`/api/nameList/${item.id}`, JSON.stringify(item), options)
             .delay(SIMULATED_NETWORK_DELAY);
     }
     delete(item: NameListItem): Observable<Response> {
         return this.http
-            .delete(`/api/${item.id}`)
+            .delete(`/api/nameList/${item.id}`)
             .delay(SIMULATED_NETWORK_DELAY);
     }
 }
