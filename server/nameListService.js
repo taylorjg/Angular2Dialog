@@ -1,8 +1,8 @@
 const nameList = [
-    { id: 23, firstName: "F1", lastName: "L1", email: "f1.l1@gmail.com" },
-    { id: 24, firstName: "F2", lastName: "L2", email: "f2.l2@gmail.com" },
-    { id: 25, firstName: "F3", lastName: "L3", email: "f3.l3@gmail.com" },
-    { id: 26, firstName: "F4", lastName: "L4", email: "f4.l4@gmail.com" }
+    { id: 23, firstName: 'F1', lastName: 'L1', email: 'f1.l1@gmail.com' },
+    { id: 24, firstName: 'F2', lastName: 'L2', email: 'f2.l2@gmail.com' },
+    { id: 25, firstName: 'F3', lastName: 'L3', email: 'f3.l3@gmail.com' },
+    { id: 26, firstName: 'F4', lastName: 'L4', email: 'f4.l4@gmail.com' }
 ];
 
 const nextId = 27;

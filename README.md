@@ -14,7 +14,7 @@ A few things are different (other than the switch from Angular1 to Angular2):
 The application is deployed on [Heroku](https://www.heroku.com/):
 
 * https://angular2dialog.herokuapp.com/
-    * _NOTE: Heroku spins down the instance after a period of inactivity. It takes around 40s to reactivate_
+    * _NOTE: Heroku spins down the instance after a period of inactivity. It takes around 10s to reactivate_
 
 ## Future Plans
 
