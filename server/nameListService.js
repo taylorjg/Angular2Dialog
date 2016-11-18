@@ -74,9 +74,8 @@ function addHypermediaLinks(req, item) {
 }
 
 function getBaseUri(req) {
-    const hs = req.headers;
-    hs.forEach(h => console.log(`h: ${h}`));
-    const xForwardedProtoHeader = req.headers['x-forwarded-proto'];
+    console.log(`headers: ${JSON.stringify(req.headers)}`);
+    const xForwardedProtoHeader = req.header['x-forwarded-proto'];
     const protocol = (xForwardedProtoHeader) ? xForwardedProtoHeader : req.protocol;
     const baseUri = protocol + '://' + req.get('host') + req.baseUrl;
     return baseUri;
