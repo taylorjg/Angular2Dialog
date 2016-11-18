@@ -64,16 +64,15 @@ export class NameListComponent {
         this.versionService.get().subscribe(version => this.version = version);
     }
     private getItems() {
-        let observer = this.makeObserver<NameListItem[]>('get', arr => this.nameListItems = arr);
+        const observer = this.makeObserver<NameListItem[]>('get', arr => this.nameListItems = arr);
         this.nameListService.get().subscribe(observer);
     }
-    private onEditItem(oldItem: NameListItem) {
-        let clone = this.cloneItem(oldItem);
+    private onEditItem(item: NameListItem) {
         const modalRef = this.modalService.open(NameListItemModalContentComponent);
-        modalRef.componentInstance.item = clone;
+        modalRef.componentInstance.item = item;
         modalRef.result
             .then(updatedItem => {
-                let observer = this.makeObserver<Response>('update', response => {
+                const observer = this.makeObserver<Response>('update', response => {
                     this.getItems();
                 });
                 this.nameListService.update(updatedItem).subscribe(observer);
@@ -82,33 +81,22 @@ export class NameListComponent {
             });
     }
     private onDeleteItem(oldItem: NameListItem) {
-        let observer = this.makeObserver<Response>('delete', response => {
+        const observer = this.makeObserver<Response>('delete', response => {
             this.getItems();
         });
         this.nameListService.delete(oldItem).subscribe(observer);
     }
     private onAddItem() {
         const modalRef = this.modalService.open(NameListItemModalContentComponent);
-        modalRef.componentInstance.item = new NameListItem();
         modalRef.result
             .then(newItem => {
-                let observer = this.makeObserver<Response>('create', response => {
+                const observer = this.makeObserver<Response>('create', response => {
                     this.getItems();
                 });
                 this.nameListService.create(newItem).subscribe(observer);
             })
             .catch(_ => {
             });
-    }
-    private cloneItem(item: NameListItem) {
-        return new NameListItem(
-            item.id,
-            item.firstName,
-            item.lastName,
-            item.email,
-            item.readUri,
-            item.updateUri,
-            item.deleteUri);
     }
     private makeObserver<T>(serviceMethod: string, next: (value: T) => void): Observer<T> {
         this.incrementServiceCallsInProgressCount();
