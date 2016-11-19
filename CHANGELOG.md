@@ -1,6 +1,7 @@
-0.0.next
+0.0.4 (19th November 2016)
 
 * Removed simulated network delay
+* Some internal changes
 
 0.0.3 (18th November 2016)
 
