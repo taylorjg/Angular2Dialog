@@ -20,10 +20,10 @@ import { NameListItemModalService } from './nameListItemModal.service';
                 <table class="table table-striped table-condensed table-bordered">
                     <thead>
                         <tr>
-                            <th>Id <img *ngIf="serviceCallInProgress" src="smallLoadingSpinner.gif" alt="table reloading spinner"></th>
-                            <th>First Name <img *ngIf="serviceCallInProgress" src="smallLoadingSpinner.gif" alt="table reloading spinner"></th>
-                            <th>Last Name <img *ngIf="serviceCallInProgress" src="smallLoadingSpinner.gif" alt="table reloading spinner"></th>
-                            <th>Email Address <img *ngIf="serviceCallInProgress" src="smallLoadingSpinner.gif" alt="table reloading spinner"></th>
+                            <th>Id <img [ngStyle]="{ 'visibility': loadingSpinnerVisibility }" src="smallLoadingSpinner.gif" alt="table reloading spinner"></th>
+                            <th>First Name <img [ngStyle]="{ 'visibility': loadingSpinnerVisibility }" src="smallLoadingSpinner.gif" alt="table reloading spinner"></th>
+                            <th>Last Name <img [ngStyle]="{ 'visibility': loadingSpinnerVisibility }" src="smallLoadingSpinner.gif" alt="table reloading spinner"></th>
+                            <th>Email Address <img [ngStyle]="{ 'visibility': loadingSpinnerVisibility }" src="smallLoadingSpinner.gif" alt="table reloading spinner"></th>
                             <th></th>
                         </tr>
                     </thead>
@@ -51,6 +51,7 @@ export class NameListComponent {
     private nameListItems: NameListItem[];
     private serviceCallsInProgressCount = 0;
     private serviceCallInProgress = false;
+    private loadingSpinnerVisibility = 'hidden';
     private serviceCallErrorMessage = '';
     constructor(
         private nameListItemModalService: NameListItemModalService,
@@ -112,5 +113,6 @@ export class NameListComponent {
     private changeServiceCallsInProgressCount(delta: number) {
         this.serviceCallsInProgressCount += delta;
         this.serviceCallInProgress = (this.serviceCallsInProgressCount > 0);
+        this.loadingSpinnerVisibility = (this.serviceCallInProgress) ? 'visible' : 'hidden';
     }
 }
