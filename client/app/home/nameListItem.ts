@@ -1,11 +1,11 @@
 export class NameListItem {
     constructor(
-        public firstName: string,
-        public lastName: string,
-        public email: string,
-        public id?: number,
-        public readUri?: string,
-        public updateUri?: string,
-        public deleteUri?: string) {
+        readonly firstName: string,
+        readonly lastName: string,
+        readonly email: string,
+        readonly id?: number,
+        readonly readUri?: string,
+        readonly updateUri?: string,
+        readonly deleteUri?: string) {
     }
 }

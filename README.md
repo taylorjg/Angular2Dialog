@@ -22,8 +22,8 @@ The application is deployed on [Heroku](https://www.heroku.com/):
 * Add backend unit tests.
 * Add e2e (Protractor) tests (with mocked RESTful API).
 * Add real backend persistence (currently in-memory only). I will probably use Postgres for this.
-* Make the API more RESTful by adding hypermedia links.
-    * Change the frontend to make use of these hypermedia links.
+* ~~Make the API more RESTful by adding hypermedia links.~~
+    * ~~Change the frontend to make use of these hypermedia links.~~
 * Add frontend support for pagination.
 * Add frontend support for searching.
 

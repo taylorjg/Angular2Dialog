@@ -1,3 +1,7 @@
+0.0.next
+
+* Removed simulated network delay
+
 0.0.3 (18th November 2016)
 
 * The modal form now does data binding to local properties. No need to clone the item any more.
