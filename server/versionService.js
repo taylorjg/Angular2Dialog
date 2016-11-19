@@ -1,7 +1,9 @@
-const package = require('../package.json');
+'use strict';
+
+const packageJson = require('../package.json');
 
 function getVersion(req, res, _) {
-    sendJsonResponse(res, 200, { version: package.version });
+    sendJsonResponse(res, 200, { version: packageJson.version });
 }
 
 function sendJsonResponse(res, status, content) {

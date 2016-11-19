@@ -1,3 +1,7 @@
+0.0.7 (19th November 2016)
+
+* BUG FIX: all new items were being assign id 27!
+
 0.0.6 (19th November 2016)
 
 * Added a small loading spinner to each of the table column headers and got rid of the big progress bar
