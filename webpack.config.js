@@ -6,8 +6,8 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 module.exports = {
     entry: {
-        'main': './client/app/main.ts',
-        'vendor': './client/app/vendor.ts'
+        'main': './client/main.ts',
+        'vendor': './client/vendor.ts'
     },
     output: {
         path: './server/public',
