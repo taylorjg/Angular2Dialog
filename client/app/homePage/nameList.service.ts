@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
-import {Http, Response, Headers} from '@angular/http';
-import {Observable} from 'rxjs/Observable';
+import { Injectable } from '@angular/core';
+import { Http, Response, Headers } from '@angular/http';
+import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
-import {NameListItem} from './NameListItem';
+import { NameListItem } from './NameListItem';
 
 @Injectable()
 export class NameListService {

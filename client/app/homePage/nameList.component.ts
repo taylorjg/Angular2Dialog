@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Observer } from 'rxjs/Observer';
+import { Observable } from 'rxjs/Observable';
 import { Response } from "@angular/http";
 import { NameListItem } from './nameListItem';
 import { VersionService } from './version.service';
@@ -11,7 +12,7 @@ import { NameListItemModalService } from './nameListItemModal.service';
     template: `
         <div class="row">
             <div class="col-md-offset-1 col-md-10">
-                <span class="pull-right"><i><small>version: {{version}}</small></i></span>
+                <span class="pull-right"><i><small>version: {{ version | async }}</small></i></span>
                 <hr />
                 <div *ngIf="serviceCallInProgress" class="progress">
                     <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
@@ -32,10 +33,10 @@ import { NameListItemModalService } from './nameListItemModal.service';
                     </thead>
                     <tbody>
                         <tr *ngFor="let item of nameListItems">
-                            <td>{{item.id}}</td>
-                            <td>{{item.firstName}}</td>
-                            <td>{{item.lastName}}</td>
-                            <td>{{item.email}}</td>
+                            <td>{{ item.id }}</td>
+                            <td>{{ item.firstName }}</td>
+                            <td>{{ item.lastName }}</td>
+                            <td>{{ item.email }}</td>
                             <td>
                                 <button class="btn btn-primary btn-sm editBtn" (click)="onEditItem(item)">Edit</button>
                                 <button class="btn btn-danger btn-sm deleteBtn" (click)="onDeleteItem(item)">Delete</button>
@@ -50,7 +51,7 @@ import { NameListItemModalService } from './nameListItemModal.service';
         <template ngbModalContainer></template>`
 })
 export class NameListComponent {
-    private version: string;
+    private version: Observable<string>;
     private nameListItems: NameListItem[];
     private serviceCallsInProgressCount = 0;
     private serviceCallInProgress = false;
@@ -63,7 +64,7 @@ export class NameListComponent {
         this.getItems();
     }
     private getVersion() {
-        this.versionService.get().subscribe(version => this.version = version);
+        this.version = this.versionService.get();
     }
     private getItems() {
         const observer = this.makeObserver<NameListItem[]>('get all items', arr => this.nameListItems = arr);

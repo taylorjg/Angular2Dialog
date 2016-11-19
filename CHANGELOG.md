@@ -1,6 +1,7 @@
 0.0.x
 
 * Set focus to the firstname input field whenever the form modal is popped up
+    * (_my implementation uses `nativeElement`! I will revisit this some time_)
 
 0.0.4 (19th November 2016)
 
