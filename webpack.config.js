@@ -16,7 +16,10 @@ module.exports = {
     plugins: [
         new CommonsChunkPlugin('vendor', 'vendor.bundle.js'),
         new HtmlWebpackPlugin({ template: './client/index.html' }),
-        new CopyWebpackPlugin([ { from: './client/styles.css', to: 'styles.css' } ])
+        new CopyWebpackPlugin([
+            { context: './client', from: '**/*.css' },
+            { context: './client', from: '**/*.gif' }
+        ])
     ],
     resolve: {
         extensions: ['', '.ts', '.js']
