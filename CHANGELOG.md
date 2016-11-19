@@ -1,3 +1,7 @@
+0.0.6 (19th November 2016)
+
+* Added a small loading spinner to each of the table column headers and got rid of the big progress bar
+
 0.0.5 (19th November 2016)
 
 * Set focus to the firstname input field whenever the form modal is popped up

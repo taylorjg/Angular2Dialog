@@ -14,20 +14,16 @@ import { NameListItemModalService } from './nameListItemModal.service';
             <div class="col-md-offset-1 col-md-10">
                 <span class="pull-right"><i><small>version: {{ version | async }}</small></i></span>
                 <hr />
-                <div *ngIf="serviceCallInProgress" class="progress">
-                    <div class="progress-bar progress-bar-striped active" role="progressbar" style="width: 100%">
-                    </div>
-                </div>
                 <div *ngIf="serviceCallErrorMessage" class="alert alert-danger" role="alert">
                     {{ serviceCallErrorMessage }}
                 </div>
                 <table class="table table-striped table-condensed table-bordered">
                     <thead>
                         <tr>
-                            <th>Id</th>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Email Address</th>
+                            <th>Id <img *ngIf="serviceCallInProgress" src="smallLoadingSpinner.gif" alt="table reloading spinner"></th>
+                            <th>First Name <img *ngIf="serviceCallInProgress" src="smallLoadingSpinner.gif" alt="table reloading spinner"></th>
+                            <th>Last Name <img *ngIf="serviceCallInProgress" src="smallLoadingSpinner.gif" alt="table reloading spinner"></th>
+                            <th>Email Address <img *ngIf="serviceCallInProgress" src="smallLoadingSpinner.gif" alt="table reloading spinner"></th>
                             <th></th>
                         </tr>
                     </thead>
