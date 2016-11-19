@@ -68,7 +68,7 @@ export class NameListItemModalContentComponent implements OnInit {
             this.email = this.item.email;
         }
         else {
-            this.title = 'New Item';
+            this.title = 'Add Item';
         }
         this.buildForm();
     }

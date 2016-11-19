@@ -1,11 +1,10 @@
-import { Component, ViewChild } from '@angular/core';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Component } from '@angular/core';
 import { Observer } from 'rxjs/Observer';
 import { Response } from "@angular/http";
 import { NameListItem } from './nameListItem';
 import { VersionService } from './version.service';
 import { NameListService } from './nameList.service';
-import { NameListItemModalContentComponent } from './nameListItemModalContent.component';
+import { NameListItemModalService } from './nameListItemModal.service';
 
 @Component({
     selector: 'nameList',
@@ -56,7 +55,10 @@ export class NameListComponent {
     private serviceCallsInProgressCount = 0;
     private serviceCallInProgress = false;
     private serviceCallErrorMessage = '';
-    constructor(private modalService: NgbModal, private versionService: VersionService, private nameListService: NameListService) {
+    constructor(
+        private nameListItemModalService: NameListItemModalService,
+        private versionService: VersionService,
+        private nameListService: NameListService) {
         this.getVersion();
         this.getItems();
     }
@@ -68,27 +70,26 @@ export class NameListComponent {
         this.nameListService.readAll().subscribe(observer);
     }
     private onEditItem(item: NameListItem) {
-        const modalRef = this.modalService.open(NameListItemModalContentComponent);
-        modalRef.componentInstance.item = item;
+        const modalRef = this.nameListItemModalService.editItem(item);
         modalRef.result
             .then(updatedItem => {
                 const observer = this.makeObserver<Response>('update an item', response => this.getItems());
                 this.nameListService.update(updatedItem).subscribe(observer);
             })
-            .catch(_ => {});
+            .catch(_ => { });
     }
     private onDeleteItem(oldItem: NameListItem) {
         const observer = this.makeObserver<Response>('delete an item', response => this.getItems());
         this.nameListService.delete(oldItem).subscribe(observer);
     }
     private onAddItem() {
-        const modalRef = this.modalService.open(NameListItemModalContentComponent);
+        const modalRef = this.nameListItemModalService.addItem();
         modalRef.result
-            .then(newItem => {
+            .then(addedItem => {
                 const observer = this.makeObserver<Response>('create an item', response => this.getItems());
-                this.nameListService.create(newItem).subscribe(observer);
+                this.nameListService.create(addedItem).subscribe(observer);
             })
-            .catch(_ => {});
+            .catch(_ => { });
     }
     private makeObserver<T>(actionDescription: string, next: (value: T) => void): Observer<T> {
         this.incrementServiceCallsInProgressCount();
