@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, AbstractControl, Validators } from '@angular/forms';
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { NameListItem } from './nameListItem';
@@ -19,7 +19,7 @@ import { CustomValidators } from './customValidators';
             <div class="modal-body">
                 <div class="form-group" [ngClass]="feedbackClasses(firstNameControl)">
                     <label class="control-label" for="firstName">First name</label>
-                    <input type="text" id="firstName" name="firstName" class="form-control" [formControl]="firstNameControl" [(ngModel)]="firstName">
+                    <input #initialFocusField type="text" id="firstName" name="firstName" class="form-control" [formControl]="firstNameControl" [(ngModel)]="firstName">
                     <span *ngIf="firstNameControl.valid && firstNameControl.touched" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
                     <span *ngIf="!firstNameControl.valid && firstNameControl.touched" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
                     <div *ngIf="firstNameControl.hasError('required') && firstNameControl.touched" class="help-block">Please enter your first name</div> 
@@ -49,6 +49,8 @@ import { CustomValidators } from './customValidators';
         </form>`
 })
 export class NameListItemModalContentComponent implements OnInit {
+    @ViewChild('initialFocusField')
+    private initialFocusField: ElementRef;
     private form: FormGroup;
     private firstNameControl: AbstractControl;
     private lastNameControl: AbstractControl;
@@ -71,6 +73,7 @@ export class NameListItemModalContentComponent implements OnInit {
             this.title = 'Add Item';
         }
         this.buildForm();
+        this.initialFocusField.nativeElement.focus();
     }
     private onSubmit() {
         if (this.form.valid) {
