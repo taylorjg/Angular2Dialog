@@ -64,48 +64,40 @@ export class NameListComponent {
         this.versionService.get().subscribe(version => this.version = version);
     }
     private getItems() {
-        const observer = this.makeObserver<NameListItem[]>('get', arr => this.nameListItems = arr);
-        this.nameListService.get().subscribe(observer);
+        const observer = this.makeObserver<NameListItem[]>('get all items', arr => this.nameListItems = arr);
+        this.nameListService.readAll().subscribe(observer);
     }
     private onEditItem(item: NameListItem) {
         const modalRef = this.modalService.open(NameListItemModalContentComponent);
         modalRef.componentInstance.item = item;
         modalRef.result
             .then(updatedItem => {
-                const observer = this.makeObserver<Response>('update', response => {
-                    this.getItems();
-                });
+                const observer = this.makeObserver<Response>('update an item', response => this.getItems());
                 this.nameListService.update(updatedItem).subscribe(observer);
             })
-            .catch(_ => {
-            });
+            .catch(_ => {});
     }
     private onDeleteItem(oldItem: NameListItem) {
-        const observer = this.makeObserver<Response>('delete', response => {
-            this.getItems();
-        });
+        const observer = this.makeObserver<Response>('delete an item', response => this.getItems());
         this.nameListService.delete(oldItem).subscribe(observer);
     }
     private onAddItem() {
         const modalRef = this.modalService.open(NameListItemModalContentComponent);
         modalRef.result
             .then(newItem => {
-                const observer = this.makeObserver<Response>('create', response => {
-                    this.getItems();
-                });
+                const observer = this.makeObserver<Response>('create an item', response => this.getItems());
                 this.nameListService.create(newItem).subscribe(observer);
             })
-            .catch(_ => {
-            });
+            .catch(_ => {});
     }
-    private makeObserver<T>(serviceMethod: string, next: (value: T) => void): Observer<T> {
+    private makeObserver<T>(actionDescription: string, next: (value: T) => void): Observer<T> {
         this.incrementServiceCallsInProgressCount();
         this.serviceCallErrorMessage = '';
         return {
             next: next,
-            error: response => {
+            error: error => {
                 this.decrementServiceCallsInProgressCount();
-                this.serviceCallErrorMessage = `Call to ${serviceMethod} failed (${response.status} ${response.text()}).`;
+                this.serviceCallErrorMessage = `Attempt to ${actionDescription} failed with ${error}.`;
             },
             complete: () => {
                 this.decrementServiceCallsInProgressCount();
