@@ -61,10 +61,6 @@ function deleteItem(req, res, _) {
     }
 }
 
-function elementWithId(id) {
-    return e => e.id === id;
-}
-
 function addHypermediaLinks(req, item) {
     const clonedItem = Object.assign({}, item);
     const baseUri = getBaseUri(req);
@@ -80,6 +76,10 @@ function getBaseUri(req) {
     const protocol = xForwardedProtoHeader ? xForwardedProtoHeader : req.protocol;
     const baseUri = protocol + '://' + req.get('host') + req.baseUrl;
     return baseUri;
+}
+
+function elementWithId(id) {
+    return e => e.id === id;
 }
 
 function findItem(id) {
