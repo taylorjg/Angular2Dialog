@@ -9,37 +9,39 @@ const nameList = [
 
 let nextId = nameList.reduce((acc, item) => Math.max(acc, item.id), 0) + 1;
 
-console.log(`nextId: ${nextId}`);
-
-const createItem = details => {
+const createItem = (details, cb) => {
     const item = Object.assign({}, details);
     item.id = nextId++;
     nameList.push(item);
-    return item;
+    cb(item);
 };
 
-const readAllItems = () => nameList;
+const readAllItems = cb => cb(nameList);
 
-const readItem = id => findItem(id);
+const readItem = (id, cb) => cb(findItem(id));
 
-const updateItem = (id, details) => {
+const updateItem = (id, details, cb) => {
     const item = findItem(id);
     if (item) {
         item.firstName = details.firstName;
         item.lastName = details.lastName;
         item.email = details.email;
-        return item;
+        cb(item);
     }
-    return null;
+    else {
+        cb(null);
+    }
 };
 
-const deleteItem = id => {
+const deleteItem = (id, cb) => {
     const index = findItemIndex(id);
     if (index >= 0) {
         nameList.splice(index, 1);
-        return true;
+        cb(true);
     }
-    return false;
+    else {
+        cb(false);
+    }
 };
 
 const findItem = id => nameList.find(elementWithId(id));

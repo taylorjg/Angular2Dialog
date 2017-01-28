@@ -8,24 +8,27 @@ const createItem = (req, res) => {
         lastName: req.body.lastName,
         email: req.body.email
     };
-    const item = repo.createItem(details);
-    sendJsonResponse(res, 201, addHypermediaLinks(req, item));   
+    repo.createItem(details, item => {
+        sendJsonResponse(res, 201, addHypermediaLinks(req, item));   
+    });
 };
 
 const readAllItems = (req, res) => {
-    const items = repo.readAllItems();
-    sendJsonResponse(res, 200, items.map(item => addHypermediaLinks(req, item)));
+    repo.readAllItems(items => {
+        sendJsonResponse(res, 200, items.map(item => addHypermediaLinks(req, item)));
+    });
 };
 
 const readItem = (req, res) => {
     const id = Number(req.params.id);
-    const item = repo.readItem(id);
-    if (item) {
-        sendJsonResponse(res, 200, addHypermediaLinks(req, item));
-    }
-    else {
-        sendStatusResponse(res, 404)   
-    }
+    repo.readItem(id, item => {
+        if (item) {
+            sendJsonResponse(res, 200, addHypermediaLinks(req, item));
+        }
+        else {
+            sendStatusResponse(res, 404)   
+        }
+    });
 };
 
 const updateItem = (req, res) => {
@@ -35,23 +38,26 @@ const updateItem = (req, res) => {
         lastName: req.body.lastName,
         email: req.body.email
     };
-    const item = repo.updateItem(id, details);
-    if (item) {
-        sendJsonResponse(res, 200, addHypermediaLinks(req, item));
-    }
-    else {
-        sendStatusResponse(res, 404);
-    }
+    repo.updateItem(id, details, item => {
+        if (item) {
+            sendJsonResponse(res, 200, addHypermediaLinks(req, item));
+        }
+        else {
+            sendStatusResponse(res, 404);
+        }
+    });
 };
 
 const deleteItem = (req, res) => {
     const id = Number(req.params.id);
-    if (repo.deleteItem(id)) {
-        sendEmptyResponse(res, 200);   
-    }
-    else {
-        sendStatusResponse(res, 404);
-    }
+    repo.deleteItem(id, result => {
+        if (result) {
+            sendEmptyResponse(res, 200);
+        }
+        else {
+            sendStatusResponse(res, 404);
+        }
+    });
 };
 
 const addHypermediaLinks = (req, item) => {
@@ -71,7 +77,7 @@ const getBaseUri = req => {
     return baseUri;
 };
 
-const sendJsonResponse = (res, status, json) => res.status(status).json(json);
+const sendJsonResponse = (res, status, content) => res.status(status).json(content);
 const sendEmptyResponse = (res, status) => res.status(status).send();
 const sendStatusResponse = (res, status) => res.sendStatus(status);
 
