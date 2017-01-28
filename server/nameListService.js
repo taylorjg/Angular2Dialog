@@ -1,67 +1,60 @@
 'use strict';
 
-const nameList = [
-    { id: 23, firstName: 'F1', lastName: 'L1', email: 'f1.l1@gmail.com' },
-    { id: 24, firstName: 'F2', lastName: 'L2', email: 'f2.l2@gmail.com' },
-    { id: 25, firstName: 'F3', lastName: 'L3', email: 'f3.l3@gmail.com' },
-    { id: 26, firstName: 'F4', lastName: 'L4', email: 'f4.l4@gmail.com' }
-];
+const repo = require('./nameListRepoInMemory');
 
-let nextId = 27;
-
-function createItem(req, res, _) {
-    const item = {
-        id: nextId++,
+const createItem = (req, res) => {
+    const details = {
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         email: req.body.email
     };
-    nameList.push(item);
+    const item = repo.createItem(details);
     sendJsonResponse(res, 201, addHypermediaLinks(req, item));   
-}
+};
 
-function readAllItems(req, res, _) {
-    sendJsonResponse(res, 200, nameList.map(item => addHypermediaLinks(req, item)));   
-}
+const readAllItems = (req, res) => {
+    const items = repo.readAllItems();
+    sendJsonResponse(res, 200, items.map(item => addHypermediaLinks(req, item)));
+};
 
-function readItem(req, res, _) {
+const readItem = (req, res) => {
     const id = Number(req.params.id);
-    const item = findItem(id);
+    const item = repo.readItem(id);
     if (item) {
-        sendJsonResponse(res, 200, item);
+        sendJsonResponse(res, 200, addHypermediaLinks(req, item));
     }
     else {
         sendStatusResponse(res, 404)   
     }
-}
+};
 
-function updateItem(req, res, _) {
+const updateItem = (req, res) => {
     const id = Number(req.params.id);
-    const item = findItem(id);
+    const details = {
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        email: req.body.email
+    };
+    const item = repo.updateItem(id, details);
     if (item) {
-        item.firstName = req.body.firstName;
-        item.lastName = req.body.lastName;
-        item.email = req.body.email;
         sendJsonResponse(res, 200, addHypermediaLinks(req, item));
     }
     else {
         sendStatusResponse(res, 404);
     }
-}
+};
 
-function deleteItem(req, res, _) {
+const deleteItem = (req, res) => {
     const id = Number(req.params.id);
-    const index = findItemIndex(id);
-    if (index >= 0) {
-        nameList.splice(index, 1);
+    if (repo.deleteItem(id)) {
         sendEmptyResponse(res, 200);   
     }
     else {
         sendStatusResponse(res, 404);
     }
-}
+};
 
-function addHypermediaLinks(req, item) {
+const addHypermediaLinks = (req, item) => {
     const clonedItem = Object.assign({}, item);
     const baseUri = getBaseUri(req);
     const uri = `${baseUri}/${item.id}`;
@@ -69,38 +62,18 @@ function addHypermediaLinks(req, item) {
     clonedItem.updateUri = uri;
     clonedItem.deleteUri = uri;
     return clonedItem;
-}
+};
 
-function getBaseUri(req) {
+const getBaseUri = req => {
     const xForwardedProtoHeader = req.header('x-forwarded-proto');
-    const protocol = xForwardedProtoHeader ? xForwardedProtoHeader : req.protocol;
+    const protocol = xForwardedProtoHeader || req.protocol;
     const baseUri = protocol + '://' + req.get('host') + req.baseUrl;
     return baseUri;
-}
+};
 
-function elementWithId(id) {
-    return e => e.id === id;
-}
-
-function findItem(id) {
-    return nameList.find(elementWithId(id));
-}
-
-function findItemIndex(id) {
-    return nameList.findIndex(elementWithId(id));
-}
-
-function sendJsonResponse(res, status, content) {
-    res.status(status).json(content);
-}
-
-function sendEmptyResponse(res, status) {
-    res.status(status).send();
-}
-
-function sendStatusResponse(res, status) {
-    res.sendStatus(status);
-}
+const sendJsonResponse = (res, status, json) => res.status(status).json(json);
+const sendEmptyResponse = (res, status) => res.status(status).send();
+const sendStatusResponse = (res, status) => res.sendStatus(status);
 
 module.exports = {
     createItem,
