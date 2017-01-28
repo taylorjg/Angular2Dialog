@@ -1,7 +1,7 @@
 'use strict';
 
-// const repo = require('./nameListRepoInMemory');
-const repo = require('./nameListRepoRedis');
+const repo = require('./nameListRepoInMemory');
+// const repo = require('./nameListRepoRedis');
 
 const createItem = (req, res) => {
     const details = {
@@ -9,20 +9,20 @@ const createItem = (req, res) => {
         lastName: req.body.lastName,
         email: req.body.email
     };
-    repo.createItem(details, item => {
+    repo.createItem(details).then(item => {
         sendJsonResponse(res, 201, addHypermediaLinks(req, item));   
     });
 };
 
 const readAllItems = (req, res) => {
-    repo.readAllItems(items => {
+    repo.readAllItems().then(items => {
         sendJsonResponse(res, 200, items.map(item => addHypermediaLinks(req, item)));
     });
 };
 
 const readItem = (req, res) => {
     const id = Number(req.params.id);
-    repo.readItem(id, item => {
+    repo.readItem(id).then(item => {
         if (item) {
             sendJsonResponse(res, 200, addHypermediaLinks(req, item));
         }
@@ -39,7 +39,7 @@ const updateItem = (req, res) => {
         lastName: req.body.lastName,
         email: req.body.email
     };
-    repo.updateItem(id, details, item => {
+    repo.updateItem(id, details).then(item => {
         if (item) {
             sendJsonResponse(res, 200, addHypermediaLinks(req, item));
         }
@@ -51,7 +51,7 @@ const updateItem = (req, res) => {
 
 const deleteItem = (req, res) => {
     const id = Number(req.params.id);
-    repo.deleteItem(id, result => {
+    repo.deleteItem(id).then(result => {
         if (result) {
             sendEmptyResponse(res, 200);
         }
