@@ -7,7 +7,6 @@ import { AppComponent } from "./app.component";
 import { NameListComponent } from "./homePage/nameList.component";
 import { NameListItemModalService } from "./homePage/nameListItemModal.service";
 import { NameListItemModalContentComponent } from "./homePage/nameListItemModalContent.component";
-import { VersionService } from "./homePage/version.service";
 import { NameListService } from "./homePage/nameList.service";
 
 @NgModule({
@@ -22,7 +21,7 @@ import { NameListService } from "./homePage/nameList.service";
         NameListComponent,
         NameListItemModalContentComponent],
     entryComponents: [NameListItemModalContentComponent],
-    providers: [VersionService, NameListService, NameListItemModalService],
+    providers: [NameListService, NameListItemModalService],
     bootstrap: [AppComponent]
 })
 export class AppModule {

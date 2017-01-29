@@ -1,6 +1,7 @@
 const CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const packageJson = require('./package.json');
 
 module.exports = {
     entry: {
@@ -13,7 +14,10 @@ module.exports = {
     },
     plugins: [
         new CommonsChunkPlugin('vendor', 'vendor.bundle.js'),
-        new HtmlWebpackPlugin({ template: './client/index.html' }),
+        new HtmlWebpackPlugin({
+            template: './client/index.html',
+            version: packageJson.version
+        }),
         new CopyWebpackPlugin([
             { context: './client', from: '**/*.css' },
             { context: './client', from: '**/*.gif' }

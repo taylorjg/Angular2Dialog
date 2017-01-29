@@ -3,7 +3,6 @@ import { Observer } from "rxjs/Observer";
 import { Observable } from "rxjs/Observable";
 import { Response } from "@angular/http";
 import { NameListItem } from "./nameListItem";
-import { VersionService } from "./version.service";
 import { NameListService } from "./nameList.service";
 import { NameListItemModalService } from "./nameListItemModal.service";
 
@@ -12,8 +11,6 @@ import { NameListItemModalService } from "./nameListItemModal.service";
     template: `
         <div class="row">
             <div class="col-md-offset-1 col-md-10">
-                <span class="pull-right"><i><small>version: {{ version | async }}</small></i></span>
-                <hr />
                 <div *ngIf="serviceCallErrorMessage" class="alert alert-danger" role="alert">
                     {{ serviceCallErrorMessage }}
                 </div>
@@ -47,7 +44,6 @@ import { NameListItemModalService } from "./nameListItemModal.service";
         <template ngbModalContainer></template>`
 })
 export class NameListComponent {
-    private version: Observable<string>;
     private nameListItems: NameListItem[];
     private serviceCallsInProgressCount = 0;
     private serviceCallInProgress = false;
@@ -55,13 +51,8 @@ export class NameListComponent {
     private serviceCallErrorMessage = "";
     constructor(
         private nameListItemModalService: NameListItemModalService,
-        private versionService: VersionService,
         private nameListService: NameListService) {
-        this.getVersion();
         this.getItems();
-    }
-    private getVersion() {
-        this.version = this.versionService.get();
     }
     private getItems() {
         const observer = this.makeObserver<NameListItem[]>("Failed to refetch items", arr => this.nameListItems = arr);
