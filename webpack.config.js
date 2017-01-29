@@ -25,8 +25,9 @@ module.exports = {
         extensions: ['', '.ts', '.js']
     },
     module: {
-        loaders: [
-            { test: /\.ts$/, loader: 'ts' }
-        ]
+        loaders: [{
+            test: /\.ts$/,
+            loader: 'ts'
+        }]
     }
 };
