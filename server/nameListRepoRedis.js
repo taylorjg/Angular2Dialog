@@ -18,7 +18,7 @@ const createItem = details =>
 
 const readAllItems = () =>
     client.zrangeAsync('items:', 0, -1).then(keys =>
-        Promise.all(keys.map(key => client.hgetallAsync(key))));
+        Promise.map(keys, key => client.hgetallAsync(key)));
 
 const readItem = id =>
     client.hgetallAsync(`item:${id}`);
