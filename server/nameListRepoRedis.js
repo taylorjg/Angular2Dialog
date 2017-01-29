@@ -1,71 +1,51 @@
 'use strict';
 
+const Promise = require('bluebird');
 const redis = require('redis');
+Promise.promisifyAll(redis.RedisClient.prototype);
 const client = redis.createClient();
 
 client.on('error', err => console.error(`Redis error: ${err}`));
 
-const createItem = (details, cb) => {
-    client.incr('item:', (err, obj) => {
-        const id = obj;
+const createItem = details =>
+    client.incrAsync('item:').then(id => {
         const key = `item:${id}`;
-        client.zadd('items:', id, key, (err, obj) => {
+        return client.zaddAsync('items:', id, key).then(() => {
             const item = Object.assign({}, details, { id });
-            client.hmset(`item:${id}`, item, (err, obj) => {
-                cb(obj);
-            });
+            return client.hmsetAsync(`item:${id}`, item).then(() => item);
         });
     });
-};
 
-const readAllItems = cb => {
-    client.zrange('items:', 0, -1, (err, obj) => {
-        const keys = obj;
-        const items = [];
-        keys.forEach((key, index) => {
-            client.hgetall(key, (err, obj) => {
-                items.push(obj);
-                if (index === keys.length - 1) {
-                    cb(items);
-                }
-            });
-        });
-    });
-};
+const readAllItems = () =>
+    client.zrangeAsync('items:', 0, -1).then(keys =>
+        Promise.all(keys.map(key => client.hgetallAsync(key))));
 
-const readItem = (id, cb) =>
-    client.hgetall(`item:${id}`, (err, obj) =>
-        cb(obj));
+const readItem = id =>
+    client.hgetallAsync(`item:${id}`);
 
-const updateItem = (id, details, cb) => {
+const updateItem = (id, details) => {
     const key = `item:${id}`;
-    client.hgetall(key, (err, obj) => {
-        const item = obj;
+    return client.hgetallAsync(key).then(item => {
         if (item) {
             item.firstName = details.firstName;
             item.lastName = details.lastName;
             item.email = details.email;
-            client.hmset(key, item, (err, obj) => {
-                cb(item);
-            });
+            return client.hmsetAsync(key, item).then(() => item);
         }
-        else {
-            cb(null);
-        }
+        return null;
     });
 };
 
-const deleteItem = (id, cb) => {
+const deleteItem = id => {
     const key = `item:${id}`;
-    client.hdel(key, ['firstName', 'lastName', 'email', 'id'], (err, obj) => {
-        if (obj === 4) {
-            client.zrem('items:', key, (err, obj) =>
-                cb(obj === 1));
-        }
-        else {
-            cb(false);
-        }
-    });
+    return client.hkeysAsync(key).then(fieldNames =>
+        client.hdelAsync(key, fieldNames).then(numFieldsRemoved => {
+            if (numFieldsRemoved === fieldNames.length) {
+                return client.zremAsync('items:', key).then(numMembersRemoved =>
+                    numMembersRemoved === 1);
+            }
+            return false;
+        }));
 };
 
 module.exports = {
