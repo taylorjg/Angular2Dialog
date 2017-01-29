@@ -64,39 +64,41 @@ export class NameListComponent {
         this.version = this.versionService.get();
     }
     private getItems() {
-        const observer = this.makeObserver<NameListItem[]>('get all items', arr => this.nameListItems = arr);
+        const observer = this.makeObserver<NameListItem[]>('Failed to refetch items', arr => this.nameListItems = arr);
         this.nameListService.readAll().subscribe(observer);
     }
     private onEditItem(item: NameListItem) {
         const modalRef = this.nameListItemModalService.editItem(item);
         modalRef.result
             .then(updatedItem => {
-                const observer = this.makeObserver<Response>('update an item', response => this.getItems());
+                const observer = this.makeObserver<Response>(`Failed to update item ${item.id}`, response => this.getItems());
                 this.nameListService.update(updatedItem).subscribe(observer);
             })
             .catch(_ => { });
     }
     private onDeleteItem(oldItem: NameListItem) {
-        const observer = this.makeObserver<Response>('delete an item', response => this.getItems());
+        const observer = this.makeObserver<Response>(`Failed to delete item ${oldItem.id}`, response => this.getItems());
         this.nameListService.delete(oldItem).subscribe(observer);
     }
     private onAddItem() {
         const modalRef = this.nameListItemModalService.addItem();
         modalRef.result
             .then(addedItem => {
-                const observer = this.makeObserver<Response>('create an item', response => this.getItems());
+                const observer = this.makeObserver<Response>('Failed to create new item', response => this.getItems());
                 this.nameListService.create(addedItem).subscribe(observer);
             })
             .catch(_ => { });
     }
-    private makeObserver<T>(actionDescription: string, next: (value: T) => void): Observer<T> {
+    private makeObserver<T>(highLevelErrorMessage: string, next: (value: T) => void): Observer<T> {
         this.incrementServiceCallsInProgressCount();
-        this.serviceCallErrorMessage = '';
         return {
             next: next,
-            error: error => {
+            error: (response: Response) => {
                 this.decrementServiceCallsInProgressCount();
-                this.serviceCallErrorMessage = `Attempt to ${actionDescription} failed with ${error}.`;
+                if (response.status && response.statusText)
+                    this.serviceCallErrorMessage = `${highLevelErrorMessage}: ${response.statusText} (${response.status})`;
+                else
+                    this.serviceCallErrorMessage = highLevelErrorMessage;
             },
             complete: () => {
                 this.decrementServiceCallsInProgressCount();
