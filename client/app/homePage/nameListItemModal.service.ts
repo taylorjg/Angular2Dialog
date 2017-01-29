@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
-import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
-import { NameListItem } from './nameListItem';
-import { NameListItemModalContentComponent } from './nameListItemModalContent.component';
+import { Injectable } from "@angular/core";
+import { NgbModal, NgbModalRef } from "@ng-bootstrap/ng-bootstrap";
+import { NameListItem } from "./nameListItem";
+import { NameListItemModalContentComponent } from "./nameListItemModalContent.component";
 
 @Injectable()
 export class NameListItemModalService {

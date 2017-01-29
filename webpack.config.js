@@ -1,5 +1,3 @@
-const path = require('path');
-const webpack = require('webpack');
 const CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -25,9 +23,16 @@ module.exports = {
         extensions: ['', '.ts', '.js']
     },
     module: {
-        loaders: [{
-            test: /\.ts$/,
-            loader: 'ts'
-        }]
+        preLoaders: [
+            {
+                test: /\.ts$/,
+                exclude: /node_modules/,
+                loader: 'tslint'
+            }],
+        loaders: [
+            {
+                test: /\.ts$/,
+                loader: 'ts'
+            }]
     }
 };

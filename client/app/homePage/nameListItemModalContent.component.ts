@@ -1,11 +1,11 @@
-import { Component, Input, OnInit, ViewChild, ElementRef } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, AbstractControl, Validators } from '@angular/forms';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { NameListItem } from './nameListItem';
-import { CustomValidators } from './customValidators';
+import { Component, Input, OnInit, ViewChild, ElementRef } from "@angular/core";
+import { FormBuilder, FormControl, FormGroup, AbstractControl, Validators } from "@angular/forms";
+import { NgbActiveModal } from "@ng-bootstrap/ng-bootstrap";
+import { NameListItem } from "./nameListItem";
+import { CustomValidators } from "./customValidators";
 
 @Component({
-    selector: 'nameListItemModalContent',
+    selector: "nameListItemModalContent",
     template: `
         <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
 
@@ -49,7 +49,7 @@ import { CustomValidators } from './customValidators';
         </form>`
 })
 export class NameListItemModalContentComponent implements OnInit {
-    @ViewChild('initialFocusField')
+    @ViewChild("initialFocusField")
     private initialFocusField: ElementRef;
     private form: FormGroup;
     private firstNameControl: AbstractControl;
@@ -59,7 +59,7 @@ export class NameListItemModalContentComponent implements OnInit {
     private firstName: string;
     private lastName: string;
     private email: string;
-    @Input('item') item: NameListItem;
+    @Input("item") item: NameListItem;
     constructor(private activeModal: NgbActiveModal, private formBuilder: FormBuilder) {
     }
     ngOnInit() {
@@ -70,7 +70,7 @@ export class NameListItemModalContentComponent implements OnInit {
             this.email = this.item.email;
         }
         else {
-            this.title = 'Add Item';
+            this.title = "Add Item";
         }
         this.buildForm();
         this.initialFocusField.nativeElement.focus();
@@ -98,20 +98,20 @@ export class NameListItemModalContentComponent implements OnInit {
     }
     private feedbackClasses(c: AbstractControl) {
         return {
-            'has-feedback': c.touched,
-            'has-success': c.touched && c.valid,
-            'has-error': c.touched && !c.valid
+            "has-feedback": c.touched,
+            "has-success": c.touched && c.valid,
+            "has-error": c.touched && !c.valid
         };
     }
     private buildForm(): void {
         this.form = this.formBuilder.group({
-            'firstName': [this.firstName, Validators.required],
-            'lastName': [this.lastName, Validators.required],
-            'email': [this.email, Validators.compose([Validators.required, CustomValidators.email])]
+            "firstName": [this.firstName, Validators.required],
+            "lastName": [this.lastName, Validators.required],
+            "email": [this.email, Validators.compose([Validators.required, CustomValidators.email])]
         });
-        this.firstNameControl = this.form.controls['firstName'];
-        this.lastNameControl = this.form.controls['lastName'];
-        this.emailControl = this.form.controls['email'];
+        this.firstNameControl = this.form.controls["firstName"];
+        this.lastNameControl = this.form.controls["lastName"];
+        this.emailControl = this.form.controls["email"];
         if (this.item) {
             this.firstNameControl.markAsTouched();
             this.lastNameControl.markAsTouched();

@@ -1,0 +1,16 @@
+{
+    "extends": ["eslint:recommended"],
+    "parserOptions": {
+        "sourceType": "module",
+        "ecmaFeatures": {
+        }
+    },
+    "env": {
+        "browser": true,
+        "node": true
+    },
+    "rules": {
+        "semi": [2, "always"],
+        "no-console": 0
+    }
+}

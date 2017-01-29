@@ -1,14 +1,14 @@
-import { Component } from '@angular/core';
-import { Observer } from 'rxjs/Observer';
-import { Observable } from 'rxjs/Observable';
+import { Component } from "@angular/core";
+import { Observer } from "rxjs/Observer";
+import { Observable } from "rxjs/Observable";
 import { Response } from "@angular/http";
-import { NameListItem } from './nameListItem';
-import { VersionService } from './version.service';
-import { NameListService } from './nameList.service';
-import { NameListItemModalService } from './nameListItemModal.service';
+import { NameListItem } from "./nameListItem";
+import { VersionService } from "./version.service";
+import { NameListService } from "./nameList.service";
+import { NameListItemModalService } from "./nameListItemModal.service";
 
 @Component({
-    selector: 'nameList',
+    selector: "nameList",
     template: `
         <div class="row">
             <div class="col-md-offset-1 col-md-10">
@@ -51,8 +51,8 @@ export class NameListComponent {
     private nameListItems: NameListItem[];
     private serviceCallsInProgressCount = 0;
     private serviceCallInProgress = false;
-    private loadingSpinnerVisibility = 'hidden';
-    private serviceCallErrorMessage = '';
+    private loadingSpinnerVisibility = "hidden";
+    private serviceCallErrorMessage = "";
     constructor(
         private nameListItemModalService: NameListItemModalService,
         private versionService: VersionService,
@@ -64,7 +64,7 @@ export class NameListComponent {
         this.version = this.versionService.get();
     }
     private getItems() {
-        const observer = this.makeObserver<NameListItem[]>('Failed to refetch items', arr => this.nameListItems = arr);
+        const observer = this.makeObserver<NameListItem[]>("Failed to refetch items", arr => this.nameListItems = arr);
         this.nameListService.readAll().subscribe(observer);
     }
     private onEditItem(item: NameListItem) {
@@ -84,7 +84,7 @@ export class NameListComponent {
         const modalRef = this.nameListItemModalService.addItem();
         modalRef.result
             .then(addedItem => {
-                const observer = this.makeObserver<Response>('Failed to create new item', response => this.getItems());
+                const observer = this.makeObserver<Response>("Failed to create new item", response => this.getItems());
                 this.nameListService.create(addedItem).subscribe(observer);
             })
             .catch(_ => { });
@@ -102,7 +102,7 @@ export class NameListComponent {
             },
             complete: () => {
                 this.decrementServiceCallsInProgressCount();
-                this.serviceCallErrorMessage = '';
+                this.serviceCallErrorMessage = "";
             }
         };
     }
@@ -115,6 +115,6 @@ export class NameListComponent {
     private changeServiceCallsInProgressCount(delta: number) {
         this.serviceCallsInProgressCount += delta;
         this.serviceCallInProgress = (this.serviceCallsInProgressCount > 0);
-        this.loadingSpinnerVisibility = (this.serviceCallInProgress) ? 'visible' : 'hidden';
+        this.loadingSpinnerVisibility = (this.serviceCallInProgress) ? "visible" : "hidden";
     }
 }
