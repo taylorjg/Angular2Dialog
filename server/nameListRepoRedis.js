@@ -15,18 +15,16 @@ const createItem = details =>
         .then(id => {
             const key = `item:${id}`;
             const item = Object.assign({}, details, { id });
-            return client.hmsetAsync(key, item).then(() => [key, item, id]);
+            return client.hmsetAsync(key, item).then(() => [key, item]);
         })
         .then(arr => {
             const key = arr[0];
             const item = arr[1];
-            const id = arr[2];
-            // TODO: client.rpushAsync('items:', key) instead ?
-            return client.zaddAsync('items:', id, key).then(() => item);
+            return client.rpushAsync('items:', key).then(() => item);
         });
 
 const readAllItems = () =>
-    client.zrangeAsync('items:', 0, -1)
+    client.lrangeAsync('items:', 0, -1)
         .then(keys => Promise.map(keys, key => client.hgetallAsync(key)));
 
 const readItem = id =>
@@ -48,10 +46,11 @@ const updateItem = (id, details) => {
 
 const deleteItem = id => {
     const key = `item:${id}`;
-    return client.hkeysAsync(key)
-        .then(fieldNames => client.hdelAsync(key, fieldNames))
-        .then(() => client.zremAsync('items:', key))
-        .then(() => true);
+    return client.lremAsync('items:', 0, key)
+        .then(numRemoved =>
+            numRemoved > 0 ? client.hkeysAsync(key) : [])
+        .then(fieldNames =>
+            fieldNames.length > 0 ? client.hdelAsync(key, fieldNames).then(() => true) : false);
 };
 
 module.exports = {
