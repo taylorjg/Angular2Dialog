@@ -14,12 +14,15 @@ const createItem = details =>
     client.incrAsync('item:')
         .then(id => {
             const key = `item:${id}`;
-            return client.zaddAsync('items:', id, key).then(() => id);
-        })
-        .then(id => {
-            const key = `item:${id}`;
             const item = Object.assign({}, details, { id });
-            return client.hmsetAsync(key, item).then(() => item);
+            return client.hmsetAsync(key, item).then(() => [key, item, id]);
+        })
+        .then(arr => {
+            const key = arr[0];
+            const item = arr[1];
+            const id = arr[2];
+            // TODO: client.rpushAsync('items:', key) instead ?
+            return client.zaddAsync('items:', id, key).then(() => item);
         });
 
 const readAllItems = () =>

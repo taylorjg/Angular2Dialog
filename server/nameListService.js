@@ -10,6 +10,7 @@ const createItem = (req, res) => {
         email: req.body.email
     };
     repo.createItem(details).then(item => {
+        console.log(`[createItem] item: ${JSON.stringify(item)}`);
         sendJsonResponse(res, 201, addHypermediaLinks(req, item));   
     });
 };
