@@ -18,14 +18,15 @@ The application is deployed on [Heroku](https://www.heroku.com/):
 
 ## Future Plans
 
+* Add pagination functionality.
+* Add searching functionality.
 * Add frontend unit tests.
 * Add backend unit tests.
 * Add e2e (Protractor) tests (with mocked RESTful API).
-* Add real backend persistence (currently in-memory only). I will probably use Postgres for this.
+* ~~Add real backend persistence (currently in-memory only). I will probably use Postgres for this.~~
+    * _In the end, I used Redis instead_
 * ~~Make the API more RESTful by adding hypermedia links.~~
     * ~~Change the frontend to make use of these hypermedia links.~~
-* Add frontend support for pagination.
-* Add frontend support for searching.
 
 ## Screenshots
 
