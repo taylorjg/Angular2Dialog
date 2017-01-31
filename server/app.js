@@ -2,6 +2,7 @@
 
 const path = require('path');
 const express = require('express');
+const compression = require('compression');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const nameListService = require('./nameListService');
@@ -14,6 +15,7 @@ nameListServiceRouter.post('/:id', nameListService.updateItem);
 nameListServiceRouter.delete('/:id', nameListService.deleteItem);
 
 const app = express();
+app.use(compression());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan('combined'));
