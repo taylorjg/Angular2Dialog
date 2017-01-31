@@ -58,5 +58,6 @@ module.exports = {
                 test: /\.ts$/,
                 loader: 'ts'
             }]
-    }
+    },
+    devtool: 'source-map'
 };
