@@ -10,7 +10,7 @@ const preferCompressedStaticContent = rootFolder => (req, res, next) => {
         fs.stat(normalFilePath, err1 =>
             fs.stat(compressedFilePath, err2 => {
                 if (!err1 && !err2) {
-                    req.url = req.url + '.gz';
+                    req.url += '.gz';
                     res.set('Content-Encoding', 'gzip');
                 }
                 next();
