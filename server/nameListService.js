@@ -2,6 +2,7 @@
 
 // const repo = require('./nameListRepoInMemory');
 const repo = require('./nameListRepoRedis');
+const express = require('express');
 
 const createItem = (req, res) => {
     const details = {
@@ -83,10 +84,18 @@ const sendJsonResponse = (res, status, content) => res.status(status).json(conte
 const sendEmptyResponse = (res, status) => res.status(status).send();
 const sendStatusResponse = (res, status) => res.sendStatus(status);
 
+const router = express.Router();
+router.post('/', createItem);
+router.get('/', readAllItems);
+router.get('/:id', readItem);
+router.post('/:id', updateItem);
+router.delete('/:id', deleteItem);
+
 module.exports = {
     createItem,
     readAllItems,
     readItem,
     updateItem,
-    deleteItem
+    deleteItem,
+    router
 };
