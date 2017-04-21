@@ -40,7 +40,6 @@ module.exports = {
         rules: [
             {
                 test: /\.ts$/,
-                exclude: /node_modules/,
                 loader: 'tslint-loader',
                 enforce: 'pre'
             },

@@ -42,7 +42,7 @@ import { NameListItemModalService } from "./nameListItemModal.service";
                 <button id="addItemBtn" class="btn btn-primary btn-sm" (click)="onAddItem()">Add Item</button>
             </div>
         </div>
-        <template ngbModalContainer></template>`
+        <ng-template ngbModalContainer></ng-template>`
     /* tslint:enable */
 })
 export class NameListComponent {
