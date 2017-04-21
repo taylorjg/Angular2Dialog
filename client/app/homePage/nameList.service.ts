@@ -11,7 +11,7 @@ export class NameListService {
     public readAll(): Observable<NameListItem[]> {
         return this.http
             .get("/api/nameList")
-            .map((response) => <NameListItem[]> response.json());
+            .map((response) => response.json() as NameListItem[]);
     }
     public create(item: NameListItem): Observable<Response> {
         const headers = new Headers();

@@ -23,22 +23,22 @@ import { CustomValidators } from "./customValidators";
                     <input #initialFocusField type="text" id="firstName" name="firstName" class="form-control" [formControl]="firstNameControl" [(ngModel)]="firstName">
                     <span *ngIf="firstNameControl.valid && firstNameControl.touched" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
                     <span *ngIf="firstNameControl.invalid && firstNameControl.touched" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
-                    <div *ngIf="firstNameControl.hasError('required') && firstNameControl.touched" class="help-block">Please enter your first name</div> 
+                    <div *ngIf="firstNameControl.hasError('required') && firstNameControl.touched" class="help-block">Please enter your first name</div>
                 </div>
                 <div class="form-group" [ngClass]="feedbackClasses(lastNameControl)">
                     <label class="control-label" for="lastName">Last name</label>
                     <input type="text" id="lastName" name="lastName" class="form-control" [formControl]="lastNameControl" [(ngModel)]="lastName">
                     <span *ngIf="lastNameControl.valid && lastNameControl.touched" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
                     <span *ngIf="lastNameControl.invalid && lastNameControl.touched" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
-                    <div *ngIf="lastNameControl.hasError('required') && lastNameControl.touched" class="help-block">Please enter your last name</div> 
+                    <div *ngIf="lastNameControl.hasError('required') && lastNameControl.touched" class="help-block">Please enter your last name</div>
                 </div>
                 <div class="form-group" [ngClass]="feedbackClasses(emailControl)">
                     <label class="control-label" for="email">Email</label>
                     <input type="email" id="email" name="email" class="form-control" [formControl]="emailControl" [(ngModel)]="email">
                     <span *ngIf="emailControl.valid && emailControl.touched" class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>
                     <span *ngIf="emailControl.invalid && emailControl.touched" class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>
-                    <div *ngIf="emailControl.hasError('required') && emailControl.touched" class="help-block">Please enter your email address</div> 
-                    <div *ngIf="emailControl.hasError('email') && emailControl.touched" class="help-block">Please enter a valid email address</div> 
+                    <div *ngIf="emailControl.hasError('required') && emailControl.touched" class="help-block">Please enter your email address</div>
+                    <div *ngIf="emailControl.hasError('email') && emailControl.touched" class="help-block">Please enter a valid email address</div>
                 </div>
             </div>
 
@@ -46,7 +46,7 @@ import { CustomValidators } from "./customValidators";
                 <button type="submit" class="btn btn-sm btn-primary">Save</button>
                 <button type="button" class="btn btn-sm" (click)="onCancel()">Cancel</button>
             </div>
-        
+
         </form>`
     /* tslint:enable */
 })
