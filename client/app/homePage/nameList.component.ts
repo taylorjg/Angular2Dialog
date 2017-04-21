@@ -11,7 +11,7 @@ import { NameListItemModalService } from "./nameListItemModal.service";
     /* tslint:disable:max-line-length */
     template: `
         <div class="row">
-            <div class="col-md-offset-1 col-md-10">
+            <div class="offset-md-1 col-md-10">
                 <div *ngIf="serviceCallErrorMessage" class="alert alert-danger" role="alert">
                     {{ serviceCallErrorMessage }}
                 </div>
