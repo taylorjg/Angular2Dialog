@@ -3,7 +3,10 @@ const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
+const path = require('path');
 const packageJson = require('./package.json');
+
+const serverPublic = path.join(__dirname, 'server', 'public');
 
 module.exports = {
     entry: {
@@ -11,12 +14,12 @@ module.exports = {
         'vendor': './client/vendor.ts'
     },
     output: {
-        path: './server/public',
+        path: serverPublic,
         filename: 'bundle.js'
     },
     plugins: [
-        new CommonsChunkPlugin('vendor', 'vendor.bundle.js'),
-        new CompressionPlugin({regExp: /\.css$|\.html$|\.js$|\.map$/}),
+        new CommonsChunkPlugin({ name: 'vendor', filename: 'vendor.bundle.js'}),
+        new CompressionPlugin({ regExp: /\.css$|\.html$|\.js$|\.map$/ }),
         new HtmlWebpackPlugin({
             template: './client/index.html',
             version: packageJson.version
@@ -31,20 +34,27 @@ module.exports = {
         })
     ],
     resolve: {
-        extensions: ['', '.ts', '.js']
+        extensions: ['.ts', '.js']
     },
     module: {
-        preLoaders: [
+        rules: [
             {
                 test: /\.ts$/,
                 exclude: /node_modules/,
-                loader: 'tslint'
-            }],
-        loaders: [
+                loader: 'tslint-loader',
+                enforce: 'pre'
+            },
             {
                 test: /\.ts$/,
-                loader: 'ts'
-            }]
+                loader: 'ts-loader'
+            }
+        ]
     },
-    devtool: 'source-map'
+    devtool: 'source-map',
+    devServer: {
+        contentBase: serverPublic,
+        proxy: {
+            "/api": "http://localhost:3000"
+        }
+    }
 };
