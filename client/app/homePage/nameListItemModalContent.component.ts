@@ -6,14 +6,15 @@ import { CustomValidators } from "./customValidators";
 
 @Component({
     selector: "nameListItemModalContent",
+    /* tslint:disable:max-line-length */
     template: `
         <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
 
             <div class="modal-header">
+                <h2 class="modal-title">{{ title }}</h2>
                 <button type="button" class="close" (click)="onCancel()" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h2 class="modal-title">{{ title }}</h2>
             </div>
 
             <div class="modal-body">
@@ -47,10 +48,11 @@ import { CustomValidators } from "./customValidators";
             </div>
         
         </form>`
+    /* tslint:enable */
 })
 export class NameListItemModalContentComponent implements OnInit {
-    @ViewChild("initialFocusField")
-    private initialFocusField: ElementRef;
+    @Input("item") public item: NameListItem;
+    @ViewChild("initialFocusField") private initialFocusField: ElementRef;
     private form: FormGroup;
     private firstNameControl: AbstractControl;
     private lastNameControl: AbstractControl;
@@ -59,17 +61,15 @@ export class NameListItemModalContentComponent implements OnInit {
     private firstName: string;
     private lastName: string;
     private email: string;
-    @Input("item") item: NameListItem;
     constructor(private activeModal: NgbActiveModal, private formBuilder: FormBuilder) {
     }
-    ngOnInit() {
+    public ngOnInit() {
         if (this.item) {
             this.title = `Edit Item ${this.item.id}`;
             this.firstName = this.item.firstName;
             this.lastName = this.item.lastName;
             this.email = this.item.email;
-        }
-        else {
+        } else {
             this.title = "Add Item";
         }
         this.buildForm();
@@ -105,13 +105,13 @@ export class NameListItemModalContentComponent implements OnInit {
     }
     private buildForm(): void {
         this.form = this.formBuilder.group({
-            "firstName": [this.firstName, Validators.required],
-            "lastName": [this.lastName, Validators.required],
-            "email": [this.email, Validators.compose([Validators.required, CustomValidators.email])]
+            firstName: [this.firstName, Validators.required],
+            lastName: [this.lastName, Validators.required],
+            email: [this.email, Validators.compose([Validators.required, CustomValidators.email])]
         });
-        this.firstNameControl = this.form.controls["firstName"];
-        this.lastNameControl = this.form.controls["lastName"];
-        this.emailControl = this.form.controls["email"];
+        this.firstNameControl = this.form.controls.firstName;
+        this.lastNameControl = this.form.controls.lastName;
+        this.emailControl = this.form.controls.email;
         if (this.item) {
             this.firstNameControl.markAsTouched();
             this.lastNameControl.markAsTouched();

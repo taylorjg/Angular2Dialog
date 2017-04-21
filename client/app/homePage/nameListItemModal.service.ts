@@ -7,12 +7,12 @@ import { NameListItemModalContentComponent } from "./nameListItemModalContent.co
 export class NameListItemModalService {
     constructor(private modalService: NgbModal) {
     }
-    editItem(item: NameListItem): NgbModalRef {
+    public editItem(item: NameListItem): NgbModalRef {
         const modalRef = this.modalService.open(NameListItemModalContentComponent);
         modalRef.componentInstance.item = item;
         return modalRef;
     }
-    addItem(): NgbModalRef {
+    public addItem(): NgbModalRef {
         const modalRef = this.modalService.open(NameListItemModalContentComponent);
         return modalRef;
     }
