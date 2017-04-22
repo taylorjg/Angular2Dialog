@@ -1,3 +1,12 @@
+0.0.13 (22nd April 2017)
+
+* Updated Angular from 2.4.5 to 4.0.3
+* Updated webpack from 1 to 2
+* Updated typescript and tslint and fixed warnings
+* Updated all other npm packages
+* Removed gulpfile
+* Added Circle CI
+
 0.0.7 (19th November 2016)
 
 * BUG FIX: all new items were being assign id 27!

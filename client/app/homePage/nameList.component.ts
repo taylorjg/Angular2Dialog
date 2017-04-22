@@ -8,9 +8,10 @@ import { NameListItemModalService } from "./nameListItemModal.service";
 
 @Component({
     selector: "nameList",
+    /* tslint:disable:max-line-length */
     template: `
         <div class="row">
-            <div class="col-md-offset-1 col-md-10">
+            <div class="offset-md-1 col-md-10">
                 <div *ngIf="serviceCallErrorMessage" class="alert alert-danger" role="alert">
                     {{ serviceCallErrorMessage }}
                 </div>
@@ -41,7 +42,8 @@ import { NameListItemModalService } from "./nameListItemModal.service";
                 <button id="addItemBtn" class="btn btn-primary btn-sm" (click)="onAddItem()">Add Item</button>
             </div>
         </div>
-        <template ngbModalContainer></template>`
+        <ng-template ngbModalContainer></ng-template>`
+    /* tslint:enable */
 })
 export class NameListComponent {
     private nameListItems: NameListItem[];
@@ -55,41 +57,50 @@ export class NameListComponent {
         this.getItems();
     }
     private getItems() {
-        const observer = this.makeObserver<NameListItem[]>("Failed to refetch items", arr => this.nameListItems = arr);
+        const observer = this.makeObserver<NameListItem[]>(
+            "Failed to refetch items",
+            (arr) => this.nameListItems = arr);
         this.nameListService.readAll().subscribe(observer);
     }
     private onEditItem(item: NameListItem) {
         const modalRef = this.nameListItemModalService.editItem(item);
         modalRef.result
-            .then(updatedItem => {
-                const observer = this.makeObserver<Response>(`Failed to update item ${item.id}`, response => this.getItems());
+            .then((updatedItem) => {
+                const observer = this.makeObserver<Response>(
+                    `Failed to update item ${item.id}`,
+                    (response) => this.getItems());
                 this.nameListService.update(updatedItem).subscribe(observer);
             })
-            .catch(_ => { });
+            .catch(() => undefined);
     }
     private onDeleteItem(oldItem: NameListItem) {
-        const observer = this.makeObserver<Response>(`Failed to delete item ${oldItem.id}`, response => this.getItems());
+        const observer = this.makeObserver<Response>(
+            `Failed to delete item ${oldItem.id}`,
+            (response) => this.getItems());
         this.nameListService.delete(oldItem).subscribe(observer);
     }
     private onAddItem() {
         const modalRef = this.nameListItemModalService.addItem();
         modalRef.result
-            .then(addedItem => {
-                const observer = this.makeObserver<Response>("Failed to create new item", response => this.getItems());
+            .then((addedItem) => {
+                const observer = this.makeObserver<Response>(
+                    "Failed to create new item",
+                    (response) => this.getItems());
                 this.nameListService.create(addedItem).subscribe(observer);
             })
-            .catch(_ => { });
+            .catch(() => undefined);
     }
-    private makeObserver<T>(highLevelErrorMessage: string, next: (value: T) => void): Observer<T> {
+    private makeObserver<T>(message: string, next: (value: T) => void): Observer<T> {
         this.incrementServiceCallsInProgressCount();
         return {
-            next: next,
+            next,
             error: (response: Response) => {
                 this.decrementServiceCallsInProgressCount();
-                if (response.status && response.statusText)
-                    this.serviceCallErrorMessage = `${highLevelErrorMessage}: ${response.statusText} (${response.status})`;
-                else
-                    this.serviceCallErrorMessage = highLevelErrorMessage;
+                if (response.status && response.statusText) {
+                    this.serviceCallErrorMessage = `${message}: ${response.statusText} (${response.status})`;
+                } else {
+                    this.serviceCallErrorMessage = message;
+                }
             },
             complete: () => {
                 this.decrementServiceCallsInProgressCount();
