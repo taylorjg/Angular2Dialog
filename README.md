@@ -1,10 +1,11 @@
+[![CircleCI](https://circleci.com/gh/taylorjg/Angular2Dialog.svg?style=svg)](https://circleci.com/gh/taylorjg/Angular2Dialog)
 
 ## Description
 
-This is a little Angular2 app that demonstrates a form with validation inside an ng-bootstrap modal dialog.
-It is an update of my earlier Angular1 [AngularDialog](https://github.com/taylorjg/AngularDialog) repo.
+This is a little Angular 2+ app that demonstrates a form with validation inside an ng-bootstrap modal dialog.
+It is an update of my earlier Angular 1.x [AngularDialog](https://github.com/taylorjg/AngularDialog) repo.
 
-A few things are different (other than the switch from Angular1 to Angular2):
+A few things are different (other than the switch from Angular 1.x to Angular 2+):
 
 * Use of Visual Studio Code instead of Visual Studio 2015.
 * Use of Node.js/Express backend instead of IIS/ASP.NET MVC.

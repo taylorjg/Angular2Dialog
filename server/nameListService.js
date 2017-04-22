@@ -1,7 +1,7 @@
 'use strict';
 
-const repo = require('./nameListRepoInMemory');
-// const repo = require('./nameListRepoRedis');
+// const repo = require('./nameListRepoInMemory');
+const repo = require('./nameListRepoRedis');
 const express = require('express');
 
 const createItem = (req, res) => {

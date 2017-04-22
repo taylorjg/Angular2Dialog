@@ -1,8 +1,7 @@
 {
   "name": "angular2dialog",
-  "version": "0.0.13-beta",
-  "description": "Angular2+ app demonstrating a form with validation inside an ng-bootstrap modal dialog",
-  "main": "gulpfile.js",
+  "version": "0.0.13",
+  "description": "Angular 2+ app demonstrating a form with validation inside an ng-bootstrap modal dialog",
   "dependencies": {
     "@angular/common": "^4.0.3",
     "@angular/compiler": "^4.0.3",
@@ -19,7 +18,7 @@
     "reflect-metadata": "^0.1.10",
     "rxjs": "^5.3.0",
     "systemjs": "^0.20.12",
-    "zone.js": "^0.8.5"
+    "zone.js": "^0.8.8"
   },
   "devDependencies": {
     "bluebird": "^3.5.0",
