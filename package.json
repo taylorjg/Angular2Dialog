@@ -1,6 +1,6 @@
 {
   "name": "angular2dialog",
-  "version": "0.0.14",
+  "version": "0.0.15",
   "description": "Angular 2+ app demonstrating a form with validation inside an ng-bootstrap modal dialog",
   "dependencies": {
     "@angular/common": "^4.0.3",
