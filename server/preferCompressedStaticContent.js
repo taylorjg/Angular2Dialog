@@ -4,7 +4,7 @@ const path = require('path');
 const fs = require('fs');
 
 const preferCompressedStaticContent = rootFolder => (req, res, next) => {
-    if (req.method === 'GET' && req.get('Accept-Encoding').indexOf('gzip') >= 0) {
+    if (req.method === 'GET' && req.get('Accept-Encoding') && req.get('Accept-Encoding').indexOf('gzip') >= 0) {
         const normalFilePath = path.join(rootFolder, req.url);
         const compressedFilePath = normalFilePath + '.gz';
         fs.stat(normalFilePath, err1 =>

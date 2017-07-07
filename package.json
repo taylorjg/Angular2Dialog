@@ -10,7 +10,7 @@
     "@angular/http": "^4.0.3",
     "@angular/platform-browser": "^4.0.3",
     "@angular/platform-browser-dynamic": "^4.0.3",
-    "@ng-bootstrap/ng-bootstrap": "^1.0.0-alpha.23",
+    "@ng-bootstrap/ng-bootstrap": "^1.0.0-alpha.24",
     "body-parser": "^1.17.1",
     "core-js": "^2.4.1",
     "express": "^4.15.2",
@@ -29,10 +29,10 @@
     "redis": "^2.7.1",
     "ts-loader": "^2.0.3",
     "tslint": "^5.1.0",
-    "tslint-loader": "^3.5.2",
+    "tslint-loader": "^3.5.3",
     "typescript": "^2.2.2",
     "webpack": "^2.4.1",
-    "webpack-dev-server": "^2.4.2"
+    "webpack-dev-server": "^2.4.4"
   },
   "scripts": {
     "start": "node server/app.js",
